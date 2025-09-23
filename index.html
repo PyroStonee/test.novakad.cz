@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Test Web</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      text-align: center;
+      padding: 50px;
+    }
+    h1 {
+      color: #333;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #output {
+      margin-top: 20px;
+      font-size: 18px;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <h1>Vítej na testovací stránce</h1>
+  <p>Klikni na tlačítko a něco se stane:</p>
+  <button onclick="showMessage()">Klikni mě</button>
+  <div id="output"></div>
+
+  <script>
+    function showMessage() {
+      document.getElementById('output').innerText = "Tlačítko bylo úspěšně kliknuto!";
+    }
+  </script>
+</body>
+</html>
