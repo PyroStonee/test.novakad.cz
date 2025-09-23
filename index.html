@@ -21,6 +21,7 @@
       color: white;
       border: none;
       border-radius: 5px;
+      margin: 10px;
     }
     button:hover {
       background-color: #0056b3;
@@ -35,12 +36,22 @@
 <body>
   <h1>Vítej na testovací stránce</h1>
   <p>Klikni na tlačítko a něco se stane:</p>
+
+  <!-- Původní tlačítko -->
   <button onclick="showMessage()">Klikni mě</button>
+
+  <!-- Nové tlačítko pro přesměrování -->
+  <button onclick="redirectTo()">Jdi na mp.spse.cz</button>
+
   <div id="output"></div>
 
   <script>
     function showMessage() {
       document.getElementById('output').innerText = "Tlačítko bylo úspěšně kliknuto!";
+    }
+
+    function redirectTo() {
+      window.location.href = "https://mp.spse.cz";
     }
   </script>
 </body>
