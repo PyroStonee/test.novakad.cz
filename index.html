@@ -1,58 +1,342 @@
-<!DOCTYPE html>
-<html lang="cs">
-<head>
-  <meta charset="UTF-8">
-  <title>Test Web</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
-      text-align: center;
-      padding: 50px;
-    }
-    h1 {
-      color: #333;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      background-color: #007BFF;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      margin: 10px;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    #output {
-      margin-top: 20px;
-      font-size: 18px;
-      color: green;
-    }
-  </style>
-</head>
-<body>
-  <h1>Vítej na testovací stránce</h1>
-  <p>Klikni na tlačítko a něco se stane:</p>
+<!doctype html>
+<html lang="cs" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Adam • Profesionální web (SPŠE Pardubice)</title>
+    <meta name="description" content="Profesionální, responzivní web s podporou světlého/tmavého režimu pro prezentaci maturitního projektu a školních aktivit (SPŠE Pardubice)." />
+    <meta name="color-scheme" content="dark light" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <script>
+      // Preferovaná barevná schémata: načti z localStorage, případně z media query
+      (function () {
+        const stored = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (stored === 'dark' || (!stored && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      })();
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      // Tailwind konfigurace (volitelné rozšíření)
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc', 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81'
+              }
+            },
+            boxShadow: {
+              soft: '0 10px 25px -10px rgb(0 0 0 / 0.2)'
+            }
+          }
+        },
+        darkMode: 'class'
+      }
+    </script>
+    <style>
+      /* Plynulé přepínání motivu */
+      html { transition: background-color .2s ease, color .2s ease; }
+      /* Vizuálně skryté, ale fokusovatelné (pro skip link) */
+      .skip-link { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+      .skip-link:focus { position:static; width:auto; height:auto; padding:.5rem 1rem; background:#111827; color:#fff; border-radius:.5rem; z-index:1000; }
+    </style>
+  </head>
+  <body class="bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 selection:bg-brand-200 dark:selection:bg-brand-700/60">
+    <a href="#obsah" class="skip-link">Přeskočit na obsah</a>
 
-  <!-- Původní tlačítko -->
-  <button onclick="showMessage()">Klikni mě</button>
+    <!-- Navigace -->
+    <header class="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:supports-[backdrop-filter]:bg-slate-900/70 border-b border-slate-200/70 dark:border-slate-800">
+      <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex h-16 items-center justify-between">
+          <a href="#" class="flex items-center gap-2 group" aria-label="Domů">
+            <span class="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-brand-600 text-white shadow-soft group-hover:scale-105 transition">
+              <!-- logo (A) -->
+              <span class="font-bold">A</span>
+            </span>
+            <span class="font-semibold tracking-tight">Adam · SPŠE Pardubice</span>
+          </a>
 
-  <!-- Nové tlačítko pro přesměrování -->
-  <button onclick="redirectTo()">Jdi na mp.spse.cz</button>
+          <div class="hidden md:flex items-center gap-8">
+            <a href="#projekty" class="hover:text-brand-600 dark:hover:text-brand-400">Projekty</a>
+            <a href="#o-mne" class="hover:text-brand-600 dark:hover:text-brand-400">O mně</a>
+            <a href="#kontakt" class="hover:text-brand-600 dark:hover:text-brand-400">Kontakt</a>
+            <div class="h-6 w-px bg-slate-300/70 dark:bg-slate-700" aria-hidden="true"></div>
+            <a href="https://mp.spse.cz/" target="_blank" rel="noopener" class="inline-flex items-center gap-2 rounded-lg border border-slate-300/70 dark:border-slate-700 px-3 py-1.5 text-sm hover:border-brand-500 hover:text-brand-600 dark:hover:border-brand-400 dark:hover:text-brand-300" aria-label="Maturitní projekty – mp.spse.cz (otevře se v novém okně)">
+              <span>MP (maturitní projekty)</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4" aria-hidden="true"><path d="M5.25 5.25A.75.75 0 016 4.5h13.5a.75.75 0 01.75.75V18.75a.75.75 0 01-1.5 0V6.31L6.53 19.03a.75.75 0 01-1.06-1.06L17.69 5.25H6a.75.75 0 01-.75-.75z"/></svg>
+            </a>
+            <a href="https://i4.spse.cz/" target="_blank" rel="noopener" class="inline-flex items-center gap-2 rounded-lg bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-3 py-1.5 text-sm hover:shadow-soft" aria-label="Intranet – i4.spse.cz (otevře se v novém okně)">
+              <span>Intranet</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4" aria-hidden="true"><path d="M16.5 3.75a.75.75 0 01.75.75v3a.75.75 0 01-1.5 0V5.56L9.53 11.5a.75.75 0 01-1.06-1.06l6.16-5.94H15a.75.75 0 010-1.5h1.5z"/><path d="M4.5 6.75a2.25 2.25 0 012.25-2.25H12a.75.75 0 010 1.5H6.75a.75.75 0 00-.75.75V17.25c0 .414.336.75.75.75H17.25a.75.75 0 00.75-.75V12a.75.75 0 011.5 0v5.25A2.25 2.25 0 0117.25 19.5H6.75A2.25 2.25 0 014.5 17.25V6.75z"/></svg>
+            </a>
+            <button id="themeToggle" class="ml-2 inline-flex items-center gap-2 rounded-lg border border-slate-300/70 dark:border-slate-700 px-3 py-1.5 text-sm hover:border-brand-500 hover:text-brand-600 dark:hover:border-brand-400 dark:hover:text-brand-300" aria-label="Přepnout světlý/tmavý režim" title="Přepnout motiv">
+              <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4 hidden dark:block"><path d="M12 4.5a.75.75 0 01.75-.75h0a.75.75 0 010 1.5h0A.75.75 0 0112 4.5zM5.47 5.47a.75.75 0 011.06 0 .75.75 0 01-1.06 1.06.75.75 0 010-1.06zM4.5 12a.75.75 0 01.75-.75h0a.75.75 0 010 1.5h0A.75.75 0 014.5 12zm1.72 6.78a.75.75 0 101.06-1.06.75.75 0 00-1.06 1.06zM12 19.5a.75.75 0 01.75.75h0a.75.75 0 01-1.5 0h0A.75.75 0 0112 19.5zm6.78-1.72a.75.75 0 10-1.06-1.06.75.75 0 001.06 1.06zM19.5 12a.75.75 0 01.75-.75h0a.75.75 0 010 1.5h0a.75.75 0 01-.75-.75zm-1.72-6.78a.75.75 0 10-1.06 1.06.75.75 0 001.06-1.06z"/><circle cx="12" cy="12" r="4"/></svg>
+              <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4 dark:hidden"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+              <span class="sr-only">Přepnout motiv</span>
+            </button>
+          </div>
 
-  <div id="output"></div>
+          <!-- Mobilní menu -->
+          <div class="md:hidden">
+            <button id="menuBtn" class="inline-flex items-center justify-center rounded-lg p-2 border border-slate-300/70 dark:border-slate-700" aria-expanded="false" aria-controls="mobileMenu" aria-label="Otevřít menu">
+              <svg id="menuIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+              </svg>
+              <svg id="closeIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+            </button>
+          </div>
+        </div>
+      </nav>
+      <div id="mobileMenu" class="md:hidden hidden border-t border-slate-200/70 dark:border-slate-800">
+        <div class="space-y-1 px-4 py-3">
+          <a href="#projekty" class="block rounded-lg px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-800">Projekty</a>
+          <a href="#o-mne" class="block rounded-lg px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-800">O mně</a>
+          <a href="#kontakt" class="block rounded-lg px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-800">Kontakt</a>
+          <div class="h-px bg-slate-200/70 dark:bg-slate-800 my-2"></div>
+          <a href="https://mp.spse.cz/" target="_blank" rel="noopener" class="block rounded-lg px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-800">MP (maturitní projekty)</a>
+          <a href="https://i4.spse.cz/" target="_blank" rel="noopener" class="block rounded-lg px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-800">Intranet</a>
+          <button id="themeToggleMobile" class="w-full text-left rounded-lg px-3 py-2 border border-slate-300/70 dark:border-slate-700 hover:border-brand-500 dark:hover:border-brand-400">Přepnout motiv</button>
+        </div>
+      </div>
+    </header>
 
-  <script>
-    function showMessage() {
-      document.getElementById('output').innerText = "Tlačítko bylo úspěšně kliknuto!";
-    }
+    <!-- Hrdina / Hero -->
+    <main id="obsah">
+      <section class="relative isolate overflow-hidden">
+        <div class="absolute inset-0 -z-10 bg-gradient-to-b from-brand-50 to-transparent dark:from-brand-900/20"></div>
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
+          <div class="grid lg:grid-cols-2 gap-10 items-center">
+            <div>
+              <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+                Maturitní projekt & profesionální portfolio
+              </h1>
+              <p class="mt-5 text-lg text-slate-600 dark:text-slate-300 max-w-prose">
+                Tato stránka slouží jako moderní a přehledná prezentace výsledků práce v oboru IT (Hardware a sítě).
+                Je plně responzivní, přístupná a podporuje světlý i tmavý režim. Odkazy vedou na oficiální portály školy.
+              </p>
+              <div class="mt-8 flex flex-wrap items-center gap-3">
+                <a href="#projekty" class="inline-flex items-center justify-center rounded-xl bg-brand-600 px-5 py-3 text-white shadow-soft hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500">Zobrazit projekty</a>
+                <a href="https://mp.spse.cz/" target="_blank" rel="noopener" class="inline-flex items-center justify-center rounded-xl border border-slate-300/80 dark:border-slate-700 px-5 py-3 hover:border-brand-500 dark:hover:border-brand-400">MP · mp.spse.cz</a>
+                <a href="https://i4.spse.cz/" target="_blank" rel="noopener" class="inline-flex items-center justify-center rounded-xl border border-slate-300/80 dark:border-slate-700 px-5 py-3 hover:border-brand-500 dark:hover:border-brand-400">Intranet · i4.spse.cz</a>
+              </div>
+            </div>
+            <div class="relative">
+              <div class="aspect-[16/10] rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-soft">
+                <img src="https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1400&auto=format&fit=crop" alt="Ilustrační fotografie – elektronika a vývoj" class="h-full w-full object-cover" />
+              </div>
+              <div class="absolute -bottom-6 -left-6 hidden sm:block bg-white/90 dark:bg-slate-900/90 backdrop-blur rounded-2xl border border-slate-200 dark:border-slate-800 p-4 shadow-soft">
+                <p class="text-sm leading-5 text-slate-600 dark:text-slate-300">Responzivní design · Přístupnost · UX</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-    function redirectTo() {
-      window.location.href = "https://mp.spse.cz";
-    }
-  </script>
-</body>
+      <!-- Sekce Projekty -->
+      <section id="projekty" class="py-20 sm:py-28 bg-slate-50 dark:bg-slate-900/30">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div class="flex items-end justify-between gap-6 flex-wrap">
+            <div>
+              <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">Vybrané projekty</h2>
+              <p class="mt-3 text-slate-600 dark:text-slate-300 max-w-prose">Ukázky praktických prací a školních projektů včetně maturitního projektu. Popisy jsou stručné a konkrétní.</p>
+            </div>
+            <a href="https://mp.spse.cz/" target="_blank" rel="noopener" class="inline-flex items-center gap-2 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-4 py-2 hover:shadow-soft">
+              MP · oficiální přehled
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4"><path d="M16.5 3.75a.75.75 0 01.75.75v3a.75.75 0 01-1.5 0V5.56L9.53 11.5a.75.75 0 01-1.06-1.06l6.16-5.94H15a.75.75 0 010-1.5h1.5z"/><path d="M4.5 6.75a2.25 2.25 0 012.25-2.25H12a.75.75 0 010 1.5H6.75a.75.75 0 00-.75.75V17.25c0 .414.336.75.75.75H17.25a.75.75 0 00.75-.75V12a.75.75 0 011.5 0v5.25A2.25 2.25 0 0117.25 19.5H6.75A2.25 2.25 0 014.5 17.25V6.75z"/></svg>
+            </a>
+          </div>
+
+          <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <!-- Karta 1 -->
+            <article class="group rounded-2xl border border-slate-200 dark:border-slate-800 p-5 bg-white dark:bg-slate-950/40 hover:shadow-soft transition">
+              <div class="aspect-video rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800">
+                <img src="https://images.unsplash.com/photo-1518773553398-650c184e0bb3?q=80&w=1220&auto=format&fit=crop" alt="Arduino a senzory" class="h-full w-full object-cover group-hover:scale-[1.02] transition"/>
+              </div>
+              <h3 class="mt-4 text-xl font-semibold">Domácí bezpečnostní systém (Arduino)</h3>
+              <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Modelová instalace: PIR, MQ-2, RFID/otisk, GSM notifikace (SIM800L), Wi‑Fi modul, napájení 5 V/3 A, společná zem, dokumentace a schémata.</p>
+              <ul class="mt-3 flex flex-wrap gap-2 text-xs text-slate-600 dark:text-slate-300">
+                <li class="rounded-full border border-slate-300/70 dark:border-slate-700 px-2 py-1">C/C++</li>
+                <li class="rounded-full border border-slate-300/70 dark:border-slate-700 px-2 py-1">Arduino</li>
+                <li class="rounded-full border border-slate-300/70 dark:border-slate-700 px-2 py-1">Fritzing</li>
+              </ul>
+            </article>
+
+            <!-- Karta 2 -->
+            <article class="group rounded-2xl border border-slate-200 dark:border-slate-800 p-5 bg-white dark:bg-slate-950/40 hover:shadow-soft transition">
+              <div class="aspect-video rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800">
+                <img src="https://images.unsplash.com/photo-1587202372775-98927b5751d7?q=80&w=1220&auto=format&fit=crop" alt="Počítačové sítě" class="h-full w-full object-cover group-hover:scale-[1.02] transition"/>
+              </div>
+              <h3 class="mt-4 text-xl font-semibold">Segmentace sítě & VLAN (praktikum)</h3>
+              <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Návrh topologie, konfigurace přepínačů, trunk/access porty, DHCP relay, základní zabezpečení a měření propustnosti.</p>
+              <ul class="mt-3 flex flex-wrap gap-2 text-xs text-slate-600 dark:text-slate-300">
+                <li class="rounded-full border border-slate-300/70 dark:border-slate-700 px-2 py-1">Cisco</li>
+                <li class="rounded-full border border-slate-300/70 dark:border-slate-700 px-2 py-1">VLAN</li>
+                <li class="rounded-full border border-slate-300/70 dark:border-slate-700 px-2 py-1">IPv4/IPv6</li>
+              </ul>
+            </article>
+
+            <!-- Karta 3 -->
+            <article class="group rounded-2xl border border-slate-200 dark:border-slate-800 p-5 bg-white dark:bg-slate-950/40 hover:shadow-soft transition">
+              <div class="aspect-video rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800">
+                <img src="https://images.unsplash.com/photo-1535223289827-42f1e9919769?q=80&w=1220&auto=format&fit=crop" alt="Linux a servery" class="h-full w-full object-cover group-hover:scale-[1.02] transition"/>
+              </div>
+              <h3 class="mt-4 text-xl font-semibold">Linux servery & virtualizace</h3>
+              <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Základy administrace: služby (NGINX, SSH), UFW/iptables, systemd, zálohování, monitoring a bezpečnostní postupy.</p>
+              <ul class="mt-3 flex flex-wrap gap-2 text-xs text-slate-600 dark:text-slate-300">
+                <li class="rounded-full border border-slate-300/70 dark:border-slate-700 px-2 py-1">Linux</li>
+                <li class="rounded-full border border-slate-300/70 dark:border-slate-700 px-2 py-1">Docker</li>
+                <li class="rounded-full border border-slate-300/70 dark:border-slate-700 px-2 py-1">Bash</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sekce O mně -->
+      <section id="o-mne" class="py-20 sm:py-28">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div class="grid lg:grid-cols-2 gap-10 items-start">
+            <div>
+              <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">O mně</h2>
+              <p class="mt-4 text-slate-600 dark:text-slate-300 max-w-prose">
+                Jsem student oboru <strong>IT – Hardware a sítě</strong> na SPŠE v Pardubicích. Zaměřuji se na praktická řešení, čistý kód a
+                pečlivou dokumentaci. Baví mě návrh topologií, práce s mikrokontroléry a provoz serverových služeb.
+              </p>
+              <dl class="mt-6 grid sm:grid-cols-2 gap-6">
+                <div class="rounded-2xl border border-slate-200 dark:border-slate-800 p-5 bg-white dark:bg-slate-950/40">
+                  <dt class="font-medium">Silné stránky</dt>
+                  <dd class="mt-2 text-sm text-slate-600 dark:text-slate-300">Systematičnost, důraz na bezpečnost, dokumentace, týmová spolupráce.</dd>
+                </div>
+                <div class="rounded-2xl border border-slate-200 dark:border-slate-800 p-5 bg-white dark:bg-slate-950/40">
+                  <dt class="font-medium">Technologie</dt>
+                  <dd class="mt-2 text-sm text-slate-600 dark:text-slate-300">Arduino, C/C++, Linux, Docker, Cisco, Git, Markdown.</dd>
+                </div>
+              </dl>
+
+              <div class="mt-8 flex flex-wrap gap-3">
+                <a href="https://i4.spse.cz/" target="_blank" rel="noopener" class="inline-flex items-center justify-center rounded-xl border border-slate-300/80 dark:border-slate-700 px-5 py-3 hover:border-brand-500 dark:hover:border-brand-400">Intranet i4.spse.cz</a>
+                <a href="https://mp.spse.cz/" target="_blank" rel="noopener" class="inline-flex items-center justify-center rounded-xl bg-brand-600 px-5 py-3 text-white hover:bg-brand-700 shadow-soft">Maturitní projekty</a>
+              </div>
+            </div>
+            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 p-6 bg-white dark:bg-slate-950/40 shadow-soft">
+              <h3 class="text-xl font-semibold">Co mohu nabídnout</h3>
+              <ul class="mt-4 space-y-3 text-slate-700 dark:text-slate-300">
+                <li class="flex items-start gap-2"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-brand-500"></span>Pečlivé plánování a realistické odhady.</li>
+                <li class="flex items-start gap-2"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-brand-500"></span>Kvalitní dokumentace (diagramy, schémata, postupy).</li>
+                <li class="flex items-start gap-2"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-brand-500"></span>Responzivní webové výstupy a prezentační materiály.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA Sekce -->
+      <section class="py-16 sm:py-20">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div class="rounded-3xl border border-slate-200 dark:border-slate-800 p-8 sm:p-12 bg-gradient-to-br from-white to-slate-50 dark:from-slate-950 dark:to-slate-900/40 shadow-soft">
+            <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+              <div>
+                <h3 class="text-2xl sm:text-3xl font-bold tracking-tight">Potřebujete ukázku či konzultaci?</h3>
+                <p class="mt-3 text-slate-600 dark:text-slate-300 max-w-prose">Rád připravím demo, vysvětlím postupy a zodpovím dotazy k projektu nebo síťovým konfiguracím.</p>
+              </div>
+              <a href="#kontakt" class="inline-flex items-center justify-center rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-5 py-3 hover:shadow-soft">Kontaktujte mě</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Kontakt -->
+      <section id="kontakt" class="py-20 sm:py-28 bg-slate-50 dark:bg-slate-900/30">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div class="grid lg:grid-cols-2 gap-10 items-start">
+            <div>
+              <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">Kontakt</h2>
+              <p class="mt-4 text-slate-600 dark:text-slate-300 max-w-prose">Vyplňte formulář a ozvu se zpět. Formulář je ukázkový (bez backendu), můžete jej napojit na službu typu Formspree/Netlify.</p>
+              <div class="mt-8 space-y-4 text-sm text-slate-600 dark:text-slate-300">
+                <p><strong>Oficiální zdroje:</strong></p>
+                <ul class="list-disc ml-6">
+                  <li><a class="underline hover:text-brand-600 dark:hover:text-brand-400" href="https://mp.spse.cz/" target="_blank" rel="noopener">Maturitní projekty (mp.spse.cz)</a></li>
+                  <li><a class="underline hover:text-brand-600 dark:hover:text-brand-400" href="https://i4.spse.cz/" target="_blank" rel="noopener">Intranet (i4.spse.cz)</a></li>
+                </ul>
+              </div>
+            </div>
+            <form class="rounded-2xl border border-slate-200 dark:border-slate-800 p-6 bg-white dark:bg-slate-950/40 shadow-soft" onsubmit="event.preventDefault(); alert('Děkuji, zpráva byla odeslána (demo).');">
+              <div class="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label for="jmeno" class="block text-sm font-medium mb-1">Jméno</label>
+                  <input id="jmeno" name="jmeno" type="text" required class="w-full rounded-xl border border-slate-300/80 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 outline-none focus:ring-2 focus:ring-brand-500" />
+                </div>
+                <div>
+                  <label for="email" class="block text-sm font-medium mb-1">E‑mail</label>
+                  <input id="email" name="email" type="email" required class="w-full rounded-xl border border-slate-300/80 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 outline-none focus:ring-2 focus:ring-brand-500" />
+                </div>
+                <div class="sm:col-span-2">
+                  <label for="zprava" class="block text-sm font-medium mb-1">Zpráva</label>
+                  <textarea id="zprava" name="zprava" rows="4" required class="w-full rounded-xl border border-slate-300/80 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 outline-none focus:ring-2 focus:ring-brand-500"></textarea>
+                </div>
+              </div>
+              <div class="mt-6 flex items-center justify-between">
+                <label class="inline-flex items-center gap-2 text-sm">
+                  <input type="checkbox" required class="h-4 w-4 rounded border-slate-300 dark:border-slate-700" />
+                  <span>Souhlasím se zpracováním údajů (demo).</span>
+                </label>
+                <button type="submit" class="inline-flex items-center justify-center rounded-xl bg-brand-600 px-5 py-2.5 text-white hover:bg-brand-700 shadow-soft">Odeslat</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Patička -->
+    <footer class="border-t border-slate-200 dark:border-slate-800">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-600 dark:text-slate-400">
+        <p>© <span id="year"></span> Adam · SPŠE Pardubice. Všechna práva vyhrazena.</p>
+        <div class="flex items-center gap-3">
+          <a href="#o-mne" class="hover:text-brand-600 dark:hover:text-brand-400">O mně</a>
+          <span class="h-3 w-px bg-slate-300/70 dark:bg-slate-700"></span>
+          <a href="#kontakt" class="hover:text-brand-600 dark:hover:text-brand-400">Kontakt</a>
+          <span class="h-3 w-px bg-slate-300/70 dark:bg-slate-700"></span>
+          <a href="#" class="hover:text-brand-600 dark:hover:text-brand-400">Zpět nahoru</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Rok v patičce
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      // Přepínání motivu (desktop + mobil)
+      function applyTheme(next) {
+        if (next === 'dark') document.documentElement.classList.add('dark');
+        else document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', next);
+      }
+      function toggleTheme() {
+        const isDark = document.documentElement.classList.contains('dark');
+        applyTheme(isDark ? 'light' : 'dark');
+      }
+      document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+      document.getElementById('themeToggleMobile').addEventListener('click', toggleTheme);
+
+      // Mobilní menu
+      const menuBtn = document.getElementById('menuBtn');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const menuIcon = document.getElementById('menuIcon');
+      const closeIcon = document.getElementById('closeIcon');
+      menuBtn.addEventListener('click', () => {
+        const expanded = menuBtn.getAttribute('aria-expanded') === 'true';
+        menuBtn.setAttribute('aria-expanded', String(!expanded));
+        mobileMenu.classList.toggle('hidden');
+        menuIcon.classList.toggle('hidden');
+        closeIcon.classList.toggle('hidden');
+      });
+    </script>
+  </body>
 </html>
