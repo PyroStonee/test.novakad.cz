@@ -31,21 +31,19 @@
                 50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc', 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81'
               }
             },
-            boxShadow: {
-              soft: '0 10px 25px -10px rgb(0 0 0 / 0.2)'
-            }
+            boxShadow: { soft: '0 10px 25px -10px rgb(0 0 0 / 0.2)' }
           }
         },
         darkMode: 'class'
       }
     </script>
     <style>
-      /* Plynulé přepínání motivu */
       html { transition: background-color .2s ease, color .2s ease; }
-      /* Vizuálně skryté, ale fokusovatelné (pro skip link) */
       .skip-link { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
       .skip-link:focus { position:static; width:auto; height:auto; padding:.5rem 1rem; background:#111827; color:#fff; border-radius:.5rem; z-index:1000; }
     </style>
+    <!-- hCaptcha -->
+    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
   </head>
   <body class="bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 selection:bg-brand-200 dark:selection:bg-brand-700/60">
     <a href="#obsah" class="skip-link">Přeskočit na obsah</a>
@@ -56,7 +54,6 @@
         <div class="flex h-16 items-center justify-between">
           <a href="#" class="flex items-center gap-2 group" aria-label="Domů">
             <span class="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-brand-600 text-white shadow-soft group-hover:scale-105 transition">
-              <!-- logo (A) -->
               <span class="font-bold">A</span>
             </span>
             <span class="font-semibold tracking-tight">Adam · SPŠE Pardubice</span>
@@ -128,7 +125,7 @@
             </div>
             <div class="relative">
               <div class="aspect-[16/10] rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-soft">
-                <img src="https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1400&auto=format&fit=crop" alt="Ilustrační fotografie – elektronika a vývoj" class="h-full w-full object-cover" />
+                <img loading="lazy" src="https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1400&auto=format&fit=crop" alt="Ilustrační fotografie – elektronika a vývoj" class="h-full w-full object-cover" />
               </div>
               <div class="absolute -bottom-6 -left-6 hidden sm:block bg-white/90 dark:bg-slate-900/90 backdrop-blur rounded-2xl border border-slate-200 dark:border-slate-800 p-4 shadow-soft">
                 <p class="text-sm leading-5 text-slate-600 dark:text-slate-300">Responzivní design · Přístupnost · UX</p>
@@ -156,7 +153,7 @@
             <!-- Karta 1 -->
             <article class="group rounded-2xl border border-slate-200 dark:border-slate-800 p-5 bg-white dark:bg-slate-950/40 hover:shadow-soft transition">
               <div class="aspect-video rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800">
-                <img src="https://images.unsplash.com/photo-1518773553398-650c184e0bb3?q=80&w=1220&auto=format&fit=crop" alt="Arduino a senzory" class="h-full w-full object-cover group-hover:scale-[1.02] transition"/>
+                <img loading="lazy" src="https://images.unsplash.com/photo-1518773553398-650c184e0bb3?q=80&w=1220&auto=format&fit=crop" alt="Arduino a senzory" class="h-full w-full object-cover group-hover:scale-[1.02] transition"/>
               </div>
               <h3 class="mt-4 text-xl font-semibold">Domácí bezpečnostní systém (Arduino)</h3>
               <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Modelová instalace: PIR, MQ-2, RFID/otisk, GSM notifikace (SIM800L), Wi‑Fi modul, napájení 5 V/3 A, společná zem, dokumentace a schémata.</p>
@@ -170,7 +167,7 @@
             <!-- Karta 2 -->
             <article class="group rounded-2xl border border-slate-200 dark:border-slate-800 p-5 bg-white dark:bg-slate-950/40 hover:shadow-soft transition">
               <div class="aspect-video rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800">
-                <img src="https://images.unsplash.com/photo-1587202372775-98927b5751d7?q=80&w=1220&auto=format&fit=crop" alt="Počítačové sítě" class="h-full w-full object-cover group-hover:scale-[1.02] transition"/>
+                <img loading="lazy" src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1220&auto=format&fit=crop" alt="Počítačové sítě – rack a kabeláž" class="h-full w-full object-cover group-hover:scale-[1.02] transition"/>
               </div>
               <h3 class="mt-4 text-xl font-semibold">Segmentace sítě & VLAN (praktikum)</h3>
               <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Návrh topologie, konfigurace přepínačů, trunk/access porty, DHCP relay, základní zabezpečení a měření propustnosti.</p>
@@ -184,7 +181,7 @@
             <!-- Karta 3 -->
             <article class="group rounded-2xl border border-slate-200 dark:border-slate-800 p-5 bg-white dark:bg-slate-950/40 hover:shadow-soft transition">
               <div class="aspect-video rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800">
-                <img src="https://images.unsplash.com/photo-1535223289827-42f1e9919769?q=80&w=1220&auto=format&fit=crop" alt="Linux a servery" class="h-full w-full object-cover group-hover:scale-[1.02] transition"/>
+                <img loading="lazy" src="https://images.unsplash.com/photo-1535223289827-42f1e9919769?q=80&w=1220&auto=format&fit=crop" alt="Linux a servery" class="h-full w-full object-cover group-hover:scale-[1.02] transition"/>
               </div>
               <h3 class="mt-4 text-xl font-semibold">Linux servery & virtualizace</h3>
               <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Základy administrace: služby (NGINX, SSH), UFW/iptables, systemd, zálohování, monitoring a bezpečnostní postupy.</p>
@@ -257,7 +254,7 @@
           <div class="grid lg:grid-cols-2 gap-10 items-start">
             <div>
               <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">Kontakt</h2>
-              <p class="mt-4 text-slate-600 dark:text-slate-300 max-w-prose">Vyplňte formulář a ozvu se zpět. Formulář je ukázkový (bez backendu), můžete jej napojit na službu typu Formspree/Netlify.</p>
+              <p class="mt-4 text-slate-600 dark:text-slate-300 max-w-prose">Formulář je napojený na Formspree a chráněný hCaptcha. Vyplňte jej a já se ozvu zpět.</p>
               <div class="mt-8 space-y-4 text-sm text-slate-600 dark:text-slate-300">
                 <p><strong>Oficiální zdroje:</strong></p>
                 <ul class="list-disc ml-6">
@@ -266,7 +263,15 @@
                 </ul>
               </div>
             </div>
-            <form class="rounded-2xl border border-slate-200 dark:border-slate-800 p-6 bg-white dark:bg-slate-950/40 shadow-soft" onsubmit="event.preventDefault(); alert('Děkuji, zpráva byla odeslána (demo).');">
+
+            <!-- ✍️ Formulář -->
+            <form id="kontaktForm"
+                  class="rounded-2xl border border-slate-200 dark:border-slate-800 p-6 bg-white dark:bg-slate-950/40 shadow-soft"
+                  action="https://formspree.io/f/mrbyqyqn"  
+                  method="POST">
+              <input type="hidden" name="_subject" value="Nová zpráva z webu – Kontakt" />
+              <input type="hidden" name="_format" value="plain" />
+
               <div class="grid sm:grid-cols-2 gap-4">
                 <div>
                   <label for="jmeno" class="block text-sm font-medium mb-1">Jméno</label>
@@ -280,14 +285,31 @@
                   <label for="zprava" class="block text-sm font-medium mb-1">Zpráva</label>
                   <textarea id="zprava" name="zprava" rows="4" required class="w-full rounded-xl border border-slate-300/80 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 outline-none focus:ring-2 focus:ring-brand-500"></textarea>
                 </div>
+                <!-- Honeypot proti spamu -->
+                <input type="text" name="_gotcha" class="hidden" tabindex="-1" autocomplete="off" />
               </div>
-              <div class="mt-6 flex items-center justify-between">
-                <label class="inline-flex items-center gap-2 text-sm">
-                  <input type="checkbox" required class="h-4 w-4 rounded border-slate-300 dark:border-slate-700" />
-                  <span>Souhlasím se zpracováním údajů (demo).</span>
-                </label>
-                <button type="submit" class="inline-flex items-center justify-center rounded-xl bg-brand-600 px-5 py-2.5 text-white hover:bg-brand-700 shadow-soft">Odeslat</button>
+
+              <div class="mt-6 space-y-4">
+                <div class="flex items-center justify-between">
+                  <label class="inline-flex items-center gap-2 text-sm">
+                    <input type="checkbox" required class="h-4 w-4 rounded border-slate-300 dark:border-slate-700" />
+                    <span>Souhlasím se zpracováním údajů.</span>
+                  </label>
+                </div>
+
+                <!-- hCaptcha widget -->
+                <div class="h-captcha" data-sitekey="REPLACE_WITH_YOUR_HCAPTCHA_SITEKEY"
+                     data-callback="onCaptchaSuccess" data-expired-callback="onCaptchaExpired"></div>
+
+                <div class="flex items-center justify-end">
+                  <button id="submitBtn" type="submit" disabled
+                          class="inline-flex items-center justify-center rounded-xl bg-brand-600 px-5 py-2.5 text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-brand-700 shadow-soft">
+                    Odeslat
+                  </button>
+                </div>
               </div>
+
+              <p id="formState" class="mt-4 text-sm text-slate-600 dark:text-slate-300 hidden"></p>
             </form>
           </div>
         </div>
@@ -337,6 +359,50 @@
         menuIcon.classList.toggle('hidden');
         closeIcon.classList.toggle('hidden');
       });
+
+      // hCaptcha callbacky (globálně pro data-* na widgetu)
+      const submitBtn = document.getElementById('submitBtn');
+      window.onCaptchaSuccess = function () {
+        if (submitBtn) submitBtn.disabled = false;
+      }
+      window.onCaptchaExpired = function () {
+        if (submitBtn) submitBtn.disabled = true;
+      }
+
+      // AJAX odeslání pro hezčí UX (Formspree)
+      const kontaktForm = document.getElementById('kontaktForm');
+      const formState = document.getElementById('formState');
+      if (kontaktForm) {
+        kontaktForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          // UX kontrola CAPTCHA
+          if (submitBtn && submitBtn.disabled) {
+            formState.classList.remove('hidden');
+            formState.textContent = 'Potvrďte prosím CAPTCHA.';
+            return;
+          }
+
+          formState.classList.remove('hidden');
+          formState.textContent = 'Odesílám…';
+          try {
+            const formData = new FormData(kontaktForm); // zahrnuje i h-captcha-response
+            const resp = await fetch(kontaktForm.action, { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } });
+            if (resp.ok) {
+              formState.textContent = 'Děkuji, Vaše zpráva byla odeslána.';
+              kontaktForm.reset();
+              if (window.hcaptcha) {
+                hcaptcha.reset();
+                if (submitBtn) submitBtn.disabled = true;
+              }
+            } else {
+              formState.textContent = 'Nepodařilo se odeslat. Zkuste prosím znovu.';
+            }
+          } catch (err) {
+            formState.textContent = 'Došlo k chybě připojení. Zkuste prosím znovu.';
+          }
+        });
+      }
     </script>
   </body>
 </html>
