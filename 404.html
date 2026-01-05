@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="cs" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>404 • Stránka nenalezena</title>
+  <meta name="description" content="Stránka nebyla nalezena. Návrat na hlavní stránku." />
+  <meta name="robots" content="noindex" />
+  <meta name="color-scheme" content="dark light" />
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    // Theme: shodně s Vaším indexem (localStorage + prefers-color-scheme)
+    (function () {
+      const stored = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (stored === 'dark' || (!stored && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+
+  <script>
+    // Tailwind: brand barvy podobné Vašemu webu
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              300: '#a5b4fc',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81'
+            }
+          },
+          boxShadow: { soft: '0 10px 25px -10px rgb(0 0 0 / 0.2)' }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* --- Jemné „Figma-like“ animace a pozadí --- */
+    :root{
+      --bg1: 255 255 255;
+      --bg2: 248 250 252;
+      --txt: 15 23 42;
+      --mut: 71 85 105;
+      --stroke: 226 232 240;
+
+      --d-bg1: 2 6 23;
+      --d-bg2: 15 23 42;
+      --d-txt: 241 245 249;
+      --d-mut: 148 163 184;
+      --d-stroke: 51 65 85;
+    }
+
+    html { transition: background-color .2s ease, color .2s ease; }
+
+    /* Gradient mesh + „moving light“ */
+    .mesh {
+      position: absolute;
+      inset: -20%;
+      filter: blur(40px);
+      opacity: .9;
+      pointer-events: none;
+      transform: translateZ(0);
+    }
+
+    .mesh::before,
+    .mesh::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(600px 420px at 20% 25%, rgba(99,102,241,.22), transparent 60%),
+        radial-gradient(560px 420px at 75% 28%, rgba(79,70,229,.18), transparent 60%),
+        radial-gradient(620px 500px at 50% 78%, rgba(129,140,248,.16), transparent 65%);
+      animation: meshDrift 12s ease-in-out infinite alternate;
+    }
+    .mesh::after{
+      background:
+        radial-gradient(520px 380px at 30% 70%, rgba(99,102,241,.18), transparent 60%),
+        radial-gradient(520px 380px at 78% 75%, rgba(124,92,255,.10), transparent 60%);
+      mix-blend-mode: multiply;
+      animation: meshDrift2 14s ease-in-out infinite alternate;
+      opacity: .75;
+    }
+
+    @keyframes meshDrift{
+      0%   { transform: translate(-2%, -1%) scale(1.02); }
+      50%  { transform: translate(1%,  1%) scale(1.03); }
+      100% { transform: translate(2%, -1%) scale(1.02); }
+    }
+    @keyframes meshDrift2{
+      0%   { transform: translate(2%,  1%) scale(1.01); }
+      50%  { transform: translate(-1%, 0%) scale(1.03); }
+      100% { transform: translate(-2%, -1%) scale(1.02); }
+    }
+
+    /* Zrno (very subtle) */
+    .grain {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: .18;
+      mix-blend-mode: overlay;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E");
+    }
+
+    /* Animovaný „sparkle“ highlight přes kartu */
+    .shine {
+      position:absolute;
+      inset:-60% -60%;
+      background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,.18) 45%, transparent 55%);
+      transform: translateX(-25%) rotate(8deg);
+      animation: shineSweep 6.5s ease-in-out infinite;
+      pointer-events:none;
+      opacity:.65;
+    }
+
+    @keyframes shineSweep{
+      0%   { transform: translateX(-40%) rotate(8deg); opacity: .0; }
+      15%  { opacity: .65; }
+      50%  { transform: translateX(40%) rotate(8deg); opacity: .65; }
+      65%  { opacity: .0; }
+      100% { transform: translateX(40%) rotate(8deg); opacity: .0; }
+    }
+
+    /* „Float“ pro dekorace */
+    @keyframes floaty { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(12px); } }
+    @keyframes floaty2{ 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(16px); } }
+
+    /* Jemný vstup (jako motion z Figmy) */
+    @keyframes enter {
+      from { opacity:0; transform: translateY(14px) scale(.99); }
+      to   { opacity:1; transform: translateY(0) scale(1); }
+    }
+
+    /* „404“ animace: číslice se jemně posouvají + blur stopa */
+    .digits {
+      display:inline-grid;
+      grid-auto-flow: column;
+      gap: .18em;
+      align-items: baseline;
+    }
+    .digit {
+      position: relative;
+      display:inline-block;
+      will-change: transform;
+      animation: digitBreathe 3.6s ease-in-out infinite;
+    }
+    .digit:nth-child(2){ animation-delay: -.6s; }
+    .digit:nth-child(3){ animation-delay: -1.2s; }
+
+    .digit::after{
+      content: attr(data-n);
+      position:absolute;
+      inset:0;
+      transform: translate(2px, 2px);
+      opacity:.16;
+      filter: blur(6px);
+      pointer-events:none;
+    }
+
+    @keyframes digitBreathe{
+      0%,100%{ transform: translateY(0); }
+      50%{ transform: translateY(-6px); }
+    }
+
+    /* Pseudo „cursor“ v mini terminálu */
+    @keyframes blink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
+
+    /* Respektuje snížený pohyb */
+    @media (prefers-reduced-motion: reduce){
+      .mesh::before,.mesh::after,.shine,.digit{ animation: none !important; }
+      .reduce-motion-note{ display:block !important; }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 selection:bg-brand-200 dark:selection:bg-brand-700/60">
+  <div class="relative min-h-screen overflow-hidden">
+    <!-- Pozadí -->
+    <div class="mesh"></div>
+    <div class="grain"></div>
+
+    <!-- Obsah -->
+    <main class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+      <!-- Horní lišta (minimal) -->
+      <header class="flex items-center justify-between">
+        <a href="/" class="inline-flex items-center gap-2 group" aria-label="Domů">
+          <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-brand-600 text-white shadow-soft group-hover:scale-105 transition">
+            <span class="font-bold">A</span>
+          </span>
+          <span class="font-semibold tracking-tight">Adam · SPŠE Pardubice</span>
+        </a>
+
+        <button id="themeToggle"
+          class="inline-flex items-center gap-2 rounded-xl border border-slate-300/80 dark:border-slate-700 bg-white/60 dark:bg-slate-900/40 backdrop-blur px-4 py-2 text-sm hover:border-brand-500 dark:hover:border-brand-400 transition"
+          aria-label="Přepnout světlý/tmavý režim">
+          <span class="hidden dark:inline">Světlý režim</span>
+          <span class="dark:hidden">Tmavý režim</span>
+          <span aria-hidden="true" class="text-lg">🌓</span>
+        </button>
+      </header>
+
+      <section class="mt-10 sm:mt-14 grid lg:grid-cols-2 gap-10 items-center">
+        <!-- Levá část: text -->
+        <div class="order-2 lg:order-1" style="animation: enter .6s ease-out both;">
+          <p class="inline-flex items-center gap-2 rounded-full border border-slate-200/70 dark:border-slate-800 bg-white/60 dark:bg-slate-900/40 backdrop-blur px-4 py-2 text-sm text-slate-600 dark:text-slate-300">
+            <span class="inline-flex h-2.5 w-2.5 rounded-full bg-brand-500" aria-hidden="true"></span>
+            Chyba navigace: <strong class="text-slate-900 dark:text-slate-100">404</strong>
+          </p>
+
+          <h1 class="mt-6 text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+            Stránka nebyla nalezena
+          </h1>
+
+          <p class="mt-4 text-lg text-slate-600 dark:text-slate-300 max-w-prose">
+            Odkaz může být neplatný, stránka byla přesunuta nebo zde nikdy nebyla.
+            Pokud jste se sem dostal přes odkaz zevnitř webu, dejte mi prosím vědět.
+          </p>
+
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="/"
+               class="inline-flex items-center justify-center rounded-2xl bg-brand-600 px-6 py-3 text-white font-medium shadow-soft hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 transition">
+              Zpět na hlavní stránku
+            </a>
+            <button id="backBtn"
+               class="inline-flex items-center justify-center rounded-2xl border border-slate-300/80 dark:border-slate-700 px-6 py-3 font-medium hover:border-brand-500 dark:hover:border-brand-400 bg-white/60 dark:bg-slate-900/40 backdrop-blur transition">
+              Zpět
+            </button>
+            <a href="#detail"
+               class="inline-flex items-center justify-center rounded-2xl border border-slate-300/80 dark:border-slate-700 px-6 py-3 font-medium hover:border-brand-500 dark:hover:border-brand-400 bg-white/30 dark:bg-slate-900/20 backdrop-blur transition">
+              Co se stalo?
+            </a>
+          </div>
+
+          <p class="reduce-motion-note mt-6 text-sm text-slate-500 dark:text-slate-400 hidden">
+            Poznámka: Máte zapnuté „omezit pohyb“, proto jsou animace ztlumené.
+          </p>
+
+          <div class="mt-10 text-sm text-slate-500 dark:text-slate-400">
+            Tip: stiskněte <span class="font-mono px-2 py-1 rounded-lg border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/40">H</span>
+            pro návrat domů.
+          </div>
+        </div>
+
+        <!-- Pravá část: „Figma karta“ s animovaným 404 + mini diagnostika -->
+        <div class="order-1 lg:order-2 relative" style="animation: enter .7s ease-out .05s both;">
+          <!-- plovoucí dekorace -->
+          <div class="absolute -top-8 -left-6 h-24 w-24 rounded-3xl bg-brand-200/60 dark:bg-brand-900/25 blur-sm opacity-80"
+               style="animation: floaty 6.5s ease-in-out infinite;"></div>
+          <div class="absolute -bottom-10 right-0 h-28 w-28 rounded-[2rem] bg-brand-100/70 dark:bg-brand-800/20 blur-sm opacity-80"
+               style="animation: floaty2 7.2s ease-in-out infinite;"></div>
+
+          <div class="relative rounded-3xl border border-slate-200/70 dark:border-slate-800 bg-white/65 dark:bg-slate-900/35 backdrop-blur shadow-soft overflow-hidden">
+            <div class="shine"></div>
+
+            <!-- horní „window“ lišta -->
+            <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200/60 dark:border-slate-800/80">
+              <div class="flex items-center gap-2" aria-hidden="true">
+                <span class="h-2.5 w-2.5 rounded-full bg-slate-300/80 dark:bg-slate-700"></span>
+                <span class="h-2.5 w-2.5 rounded-full bg-slate-300/80 dark:bg-slate-700"></span>
+                <span class="h-2.5 w-2.5 rounded-full bg-slate-300/80 dark:bg-slate-700"></span>
+              </div>
+              <span class="text-sm text-slate-600 dark:text-slate-300">Status</span>
+            </div>
+
+            <div class="p-6 sm:p-8">
+              <!-- velké 404 -->
+              <div class="text-center">
+                <div class="digits text-7xl sm:text-8xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">
+                  <span class="digit" data-n="4">4</span>
+                  <span class="digit" data-n="0">0</span>
+                  <span class="digit" data-n="4">4</span>
+                </div>
+
+                <p class="mt-4 text-slate-600 dark:text-slate-300">
+                  Server vrátil odpověď <span class="font-mono">HTTP 404</span>.
+                </p>
+              </div>
+
+              <!-- „diagnostika“ -->
+              <div id="detail" class="mt-8 grid sm:grid-cols-2 gap-4">
+                <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/50 dark:bg-slate-950/30 p-4">
+                  <div class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Požadovaná adresa</div>
+                  <div id="path" class="mt-1 font-mono text-sm text-slate-900 dark:text-slate-100 break-all"></div>
+                </div>
+
+                <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/50 dark:bg-slate-950/30 p-4">
+                  <div class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Čas</div>
+                  <div id="ts" class="mt-1 font-mono text-sm text-slate-900 dark:text-slate-100"></div>
+                </div>
+
+                <div class="sm:col-span-2 rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/50 dark:bg-slate-950/30 p-4">
+                  <div class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-2">Rychlá kontrola</div>
+                  <div class="font-mono text-sm leading-6 text-slate-700 dark:text-slate-300">
+                    <div><span class="text-brand-600 dark:text-brand-400">$</span> curl -I <span class="text-slate-900 dark:text-slate-100">requested-page</span></div>
+                    <div class="text-rose-600 dark:text-rose-400">HTTP/2 404 Not Found</div>
+                    <div class="text-slate-500 dark:text-slate-400">hint: ověřte odkaz nebo se vraťte na hlavní stránku<span class="inline-block w-[10px]"> </span><span class="inline-block w-2 h-4 align-[-2px] bg-slate-500/70 dark:bg-slate-400/70" style="animation: blink 1s steps(1) infinite;"></span></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- patička karty -->
+              <div class="mt-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-slate-500 dark:text-slate-400">
+                <span>© <span id="year"></span> Adam · SPŠE Pardubice</span>
+                <a href="/#kontakt" class="underline decoration-dashed underline-offset-4 hover:text-brand-600 dark:hover:text-brand-400">
+                  Napsat zprávu
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- malá „chips“ lišta dole -->
+          <div class="mt-4 flex flex-wrap gap-2 justify-center text-xs">
+            <span class="rounded-full border border-slate-200/70 dark:border-slate-800 bg-white/60 dark:bg-slate-900/40 backdrop-blur px-3 py-1 text-slate-600 dark:text-slate-300">
+              Responzivní
+            </span>
+            <span class="rounded-full border border-slate-200/70 dark:border-slate-800 bg-white/60 dark:bg-slate-900/40 backdrop-blur px-3 py-1 text-slate-600 dark:text-slate-300">
+              Přístupné
+            </span>
+            <span class="rounded-full border border-slate-200/70 dark:border-slate-800 bg-white/60 dark:bg-slate-900/40 backdrop-blur px-3 py-1 text-slate-600 dark:text-slate-300">
+              Dark/Light
+            </span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Rok
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Info do diagnostiky
+    document.getElementById('path').textContent = location.href;
+    document.getElementById('ts').textContent = new Date().toLocaleString('cs-CZ');
+
+    // Zpět
+    document.getElementById('backBtn').addEventListener('click', () => history.back());
+
+    // Theme toggle (kompatibilní s Vaším systémem)
+    function applyTheme(next) {
+      if (next === 'dark') document.documentElement.classList.add('dark');
+      else document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', next);
+    }
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.contains('dark');
+      applyTheme(isDark ? 'light' : 'dark');
+    }
+    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+    // Klávesová zkratka: H = domů, Esc = zpět
+    window.addEventListener('keydown', (e) => {
+      const k = e.key.toLowerCase();
+      if (k === 'h') location.href = '/';
+      if (e.key === 'Escape') history.back();
+    });
+  </script>
+</body>
+</html>
