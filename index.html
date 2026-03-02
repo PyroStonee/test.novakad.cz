@@ -1,408 +1,629 @@
 <!doctype html>
-<html lang="cs" class="scroll-smooth">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Adam • Profesionální web (SPŠE Pardubice)</title>
-    <meta name="description" content="Profesionální, responzivní web s podporou světlého/tmavého režimu pro prezentaci maturitního projektu a školních aktivit (SPŠE Pardubice)." />
-    <meta name="color-scheme" content="dark light" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-    <script>
-      // Preferovaná barevná schémata: načti z localStorage, případně z media query
-      (function () {
-        const stored = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (stored === 'dark' || (!stored && prefersDark)) {
-          document.documentElement.classList.add('dark');
-        } else {
-          document.documentElement.classList.remove('dark');
-        }
-      })();
-    </script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      // Tailwind konfigurace (volitelné rozšíření)
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              brand: {
-                50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc', 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81'
-              }
-            },
-            boxShadow: { soft: '0 10px 25px -10px rgb(0 0 0 / 0.2)' }
-          }
-        },
-        darkMode: 'class'
-      }
-    </script>
-    <style>
-      html { transition: background-color .2s ease, color .2s ease; }
-      .skip-link { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
-      .skip-link:focus { position:static; width:auto; height:auto; padding:.5rem 1rem; background:#111827; color:#fff; border-radius:.5rem; z-index:1000; }
-    </style>
-    <!-- hCaptcha -->
-    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
-  </head>
-  <body class="bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 selection:bg-brand-200 dark:selection:bg-brand-700/60">
-    <a href="#obsah" class="skip-link">Přeskočit na obsah</a>
+<html lang="cs" data-theme="auto">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
+  <title>Adam — osobní web</title>
 
-    <!-- Navigace -->
-    <header class="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:supports-[backdrop-filter]:bg-slate-900/70 border-b border-slate-200/70 dark:border-slate-800">
-      <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div class="flex h-16 items-center justify-between">
-          <a href="#" class="flex items-center gap-2 group" aria-label="Domů">
-            <span class="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-brand-600 text-white shadow-soft group-hover:scale-105 transition">
-              <span class="font-bold">A</span>
-            </span>
-            <span class="font-semibold tracking-tight">Adam · SPŠE Pardubice</span>
-          </a>
+  <meta name="description" content="Osobní web (minimum soukromých údajů). Maturitní projekt: model chytrého zabezpečení domácnosti (Arduino/ESP8266), certifikace a zájmy." />
+  <meta name="robots" content="index,follow" />
 
-          <div class="hidden md:flex items-center gap-8">
-            <a href="#projekty" class="hover:text-brand-600 dark:hover:text-brand-400">Projekty</a>
-            <a href="#o-mne" class="hover:text-brand-600 dark:hover:text-brand-400">O mně</a>
-            <a href="#kontakt" class="hover:text-brand-600 dark:hover:text-brand-400">Kontakt</a>
-            <div class="h-6 w-px bg-slate-300/70 dark:bg-slate-700" aria-hidden="true"></div>
-            <a href="https://mp.spse.cz/" target="_blank" rel="noopener" class="inline-flex items-center gap-2 rounded-lg border border-slate-300/70 dark:border-slate-700 px-3 py-1.5 text-sm hover:border-brand-500 hover:text-brand-600 dark:hover:border-brand-400 dark:hover:text-brand-300" aria-label="Maturitní projekty – mp.spse.cz (otevře se v novém okně)">
-              <span>MP (maturitní projekty)</span>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4" aria-hidden="true"><path d="M5.25 5.25A.75.75 0 016 4.5h13.5a.75.75 0 01.75.75V18.75a.75.75 0 01-1.5 0V6.31L6.53 19.03a.75.75 0 01-1.06-1.06L17.69 5.25H6a.75.75 0 01-.75-.75z"/></svg>
-            </a>
-            <a href="https://i4.spse.cz/" target="_blank" rel="noopener" class="inline-flex items-center gap-2 rounded-lg bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-3 py-1.5 text-sm hover:shadow-soft" aria-label="Intranet – i4.spse.cz (otevře se v novém okně)">
-              <span>Intranet</span>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4" aria-hidden="true"><path d="M16.5 3.75a.75.75 0 01.75.75v3a.75.75 0 01-1.5 0V5.56L9.53 11.5a.75.75 0 01-1.06-1.06l6.16-5.94H15a.75.75 0 010-1.5h1.5z"/><path d="M4.5 6.75a2.25 2.25 0 012.25-2.25H12a.75.75 0 010 1.5H6.75a.75.75 0 00-.75.75V17.25c0 .414.336.75.75.75H17.25a.75.75 0 00.75-.75V12a.75.75 0 011.5 0v5.25A2.25 2.25 0 0117.25 19.5H6.75A2.25 2.25 0 014.5 17.25V6.75z"/></svg>
-            </a>
-            <button id="themeToggle" class="ml-2 inline-flex items-center gap-2 rounded-lg border border-slate-300/70 dark:border-slate-700 px-3 py-1.5 text-sm hover:border-brand-500 hover:text-brand-600 dark:hover:border-brand-400 dark:hover:text-brand-300" aria-label="Přepnout světlý/tmavý režim" title="Přepnout motiv">
-              <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4 hidden dark:block"><path d="M12 4.5a.75.75 0 01.75-.75h0a.75.75 0 010 1.5h0A.75.75 0 0112 4.5zM5.47 5.47a.75.75 0 011.06 0 .75.75 0 01-1.06 1.06.75.75 0 010-1.06zM4.5 12a.75.75 0 01.75-.75h0a.75.75 0 010 1.5h0A.75.75 0 014.5 12zm1.72 6.78a.75.75 0 101.06-1.06.75.75 0 00-1.06 1.06zM12 19.5a.75.75 0 01.75.75h0a.75.75 0 01-1.5 0h0A.75.75 0 0112 19.5zm6.78-1.72a.75.75 0 10-1.06-1.06.75.75 0 001.06 1.06zM19.5 12a.75.75 0 01.75-.75h0a.75.75 0 010 1.5h0a.75.75 0 01-.75-.75zm-1.72-6.78a.75.75 0 10-1.06 1.06.75.75 0 001.06-1.06z"/><circle cx="12" cy="12" r="4"/></svg>
-              <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4 dark:hidden"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-              <span class="sr-only">Přepnout motiv</span>
-            </button>
-          </div>
+  <meta property="og:title" content="Adam — osobní web" />
+  <meta property="og:description" content="Maturitní projekt, certifikace a zájmy. Tech design s dark/light režimem." />
+  <meta property="og:type" content="website" />
 
-          <!-- Mobilní menu -->
-          <div class="md:hidden">
-            <button id="menuBtn" class="inline-flex items-center justify-center rounded-lg p-2 border border-slate-300/70 dark:border-slate-700" aria-expanded="false" aria-controls="mobileMenu" aria-label="Otevřít menu">
-              <svg id="menuIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-              </svg>
-              <svg id="closeIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
-            </button>
-          </div>
+  <style>
+    :root{
+      --bg: #07080b;
+      --bg2:#0b0d12;
+      --fg: #f6f7fb;
+      --muted:#b7bccb;
+      --card:#0f121a;
+      --card2:#0b0d12;
+      --border: rgba(255,255,255,.12);
+
+      --accent:#ff2d2d;          /* Blood Dragon red */
+      --accentSoft: rgba(255,45,45,.20);
+      --shadow: 0 18px 55px rgba(0,0,0,.55);
+      --radius: 18px;
+
+      --max: 1120px;
+    }
+
+    html[data-theme="light"]{
+      --bg:#f7f8fb;
+      --bg2:#ffffff;
+      --fg:#0b0d12;
+      --muted:#3f465a;
+      --card:#ffffff;
+      --card2:#f2f4f9;
+      --border: rgba(0,0,0,.12);
+      --shadow: 0 18px 55px rgba(16,24,40,.18);
+      --accentSoft: rgba(255,45,45,.16);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      color:var(--fg);
+      background:
+        radial-gradient(1200px 700px at 15% 12%, rgba(255,45,45,.12), transparent 60%),
+        radial-gradient(900px 650px at 85% 18%, rgba(255,45,45,.08), transparent 55%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+      font: 16px/1.55 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      overflow-x:hidden;
+    }
+
+    /* Subtle grid + scanlines (professional, not overdone) */
+    .fx::before{
+      content:"";
+      position:fixed; inset:0;
+      background:
+        linear-gradient(to right, rgba(255,255,255,.055) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,.045) 1px, transparent 1px);
+      background-size: 46px 46px;
+      opacity:.22;
+      pointer-events:none;
+      mix-blend-mode: overlay;
+    }
+    .fx::after{
+      content:"";
+      position:fixed; inset:-2px;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(0,0,0,0) 0px,
+        rgba(0,0,0,0) 2px,
+        rgba(0,0,0,.14) 3px
+      );
+      opacity: .28;
+      pointer-events:none;
+    }
+    html[data-theme="light"] .fx::after{ opacity:.14; }
+
+    a{color:inherit}
+    .skip{
+      position:absolute; left:-999px; top:10px;
+      background:var(--card); border:1px solid var(--border); color:var(--fg);
+      padding:10px 12px; border-radius:12px; z-index:9999;
+    }
+    .skip:focus{left:10px}
+
+    .wrap{max-width:var(--max); margin:0 auto; padding:18px 18px 64px}
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: color-mix(in oklab, var(--bg) 76%, transparent);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px;
+      max-width:var(--max); margin:0 auto; padding:14px 18px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      text-decoration:none;
+    }
+    .mark{
+      width:12px; height:12px; border-radius:4px;
+      background:var(--accent);
+      box-shadow: 0 0 0 6px var(--accentSoft), 0 0 22px rgba(255,45,45,.35);
+    }
+    .brand b{letter-spacing:.2px}
+    .brand span{color:var(--muted); font-size:13px}
+    nav a{
+      text-decoration:none;
+      color:var(--muted);
+      padding:10px 10px;
+      border-radius:12px;
+    }
+    nav a:hover{color:var(--fg); background: color-mix(in oklab, var(--card) 70%, transparent)}
+    .navRight{display:flex; align-items:center; gap:10px}
+
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:10px;
+      padding:11px 14px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background: color-mix(in oklab, var(--card) 72%, transparent);
+      color:var(--fg);
+      text-decoration:none;
+      cursor:pointer;
+      user-select:none;
+      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      border-color: color-mix(in oklab, var(--accent) 35%, var(--border));
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    .btn.primary{
+      border-color: color-mix(in oklab, var(--accent) 55%, var(--border));
+      background:
+        linear-gradient(180deg, color-mix(in oklab, var(--accent) 18%, var(--card)) 0%, var(--card) 100%);
+    }
+    .btn.small{padding:9px 12px; border-radius:12px; font-size:14px}
+
+    main{padding-top:22px}
+    .hero{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      align-items:stretch;
+      margin-top:16px;
+    }
+    @media (max-width: 920px){
+      .hero{grid-template-columns:1fr}
+      nav{display:none}
+    }
+
+    .panel{
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--card) 92%, transparent), color-mix(in oklab, var(--card2) 88%, transparent));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .panel.pad{padding:20px}
+    .kicker{
+      display:inline-flex; align-items:center; gap:10px;
+      color:var(--muted);
+      font-size:13px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+    }
+    .kicker i{
+      width:8px; height:8px; border-radius:50%;
+      background:var(--accent);
+      box-shadow: 0 0 0 6px var(--accentSoft);
+      display:inline-block;
+    }
+    h1{
+      margin:10px 0 10px;
+      font-size:42px;
+      line-height:1.06;
+      letter-spacing:-.02em;
+    }
+    .glow{
+      color:var(--fg);
+      text-shadow: 0 0 24px rgba(255,45,45,.18);
+    }
+    .lead{color:var(--muted); font-size:17px; margin:0 0 16px}
+    .chips{
+      display:flex; flex-wrap:wrap; gap:8px;
+      margin:12px 0 18px;
+    }
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background: color-mix(in oklab, var(--card) 82%, transparent);
+      color: color-mix(in oklab, var(--fg) 86%, var(--muted));
+      font-size:13px;
+      white-space:nowrap;
+    }
+    .chip b{color:var(--fg); font-weight:600}
+    .cta{display:flex; flex-wrap:wrap; gap:10px; margin-top:8px}
+
+    .avatarBox{
+      display:flex; flex-direction:column; gap:14px;
+      padding:20px;
+    }
+    .avatar{
+      width:100%;
+      min-height: 210px;
+      border-radius: calc(var(--radius) - 2px);
+      border:1px dashed color-mix(in oklab, var(--border) 70%, var(--accent));
+      background:
+        radial-gradient(500px 220px at 50% 20%, rgba(255,45,45,.12), transparent 60%),
+        linear-gradient(180deg, color-mix(in oklab, var(--card) 88%, transparent), color-mix(in oklab, var(--card2) 82%, transparent));
+      display:grid; place-items:center;
+      position:relative;
+      overflow:hidden;
+    }
+    .avatar svg{width:140px; height:140px; opacity:.92}
+    .avatarHint{color:var(--muted); font-size:14px; margin:0}
+    .mono{
+      font: 13px/1.55 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      color: color-mix(in oklab, var(--fg) 78%, var(--muted));
+      border:1px solid var(--border);
+      border-radius: 14px;
+      padding:12px;
+      background: color-mix(in oklab, var(--card) 76%, transparent);
+    }
+    .mono b{color:var(--fg)}
+    .mono .r{color:var(--accent)}
+    .mono .m{color:color-mix(in oklab, var(--muted) 90%, var(--fg))}
+    .mono .k{color:color-mix(in oklab, var(--fg) 90%, #fff)}
+    .mono .dim{opacity:.78}
+
+    section{margin-top:18px}
+    .sectionTitle{
+      display:flex; align-items:flex-end; justify-content:space-between;
+      gap:10px;
+      margin:26px 0 12px;
+    }
+    .sectionTitle h2{margin:0; font-size:20px; letter-spacing:.2px}
+    .sectionTitle p{margin:0; color:var(--muted); font-size:14px}
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:14px;
+    }
+    .col-6{grid-column: span 6}
+    .col-5{grid-column: span 5}
+    .col-7{grid-column: span 7}
+    .col-4{grid-column: span 4}
+    .col-12{grid-column: span 12}
+    @media (max-width: 920px){
+      .col-6,.col-5,.col-7,.col-4{grid-column: span 12}
+    }
+
+    .card{
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--card) 92%, transparent), color-mix(in oklab, var(--card2) 88%, transparent));
+      padding:18px;
+      position:relative;
+      overflow:hidden;
+    }
+    .card::before{
+      content:"";
+      position:absolute; inset:-1px;
+      background: radial-gradient(500px 240px at 20% 10%, rgba(255,45,45,.14), transparent 60%);
+      opacity:.9;
+      pointer-events:none;
+    }
+    html[data-theme="light"] .card::before{opacity:.55}
+    .card > *{position:relative}
+    .card h3{margin:0 0 8px; font-size:16px}
+    .card p{margin:0; color:var(--muted)}
+    .card ul{margin:12px 0 0; padding-left:18px; color:var(--muted)}
+    .card li{margin:6px 0}
+    .metaRow{
+      display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;
+    }
+
+    details{
+      margin-top:12px;
+      border-top: 1px solid var(--border);
+      padding-top:12px;
+    }
+    summary{
+      cursor:pointer;
+      color: var(--fg);
+      list-style:none;
+      display:flex; align-items:center; gap:10px;
+      user-select:none;
+    }
+    summary::-webkit-details-marker{display:none}
+    summary .caret{
+      width:10px; height:10px;
+      border-right:2px solid var(--muted);
+      border-bottom:2px solid var(--muted);
+      transform: rotate(-45deg);
+      margin-top:1px;
+      transition: transform .12s ease;
+    }
+    details[open] summary .caret{transform: rotate(45deg)}
+    .fine{font-size:13px; color:var(--muted)}
+    footer{
+      margin-top:32px;
+      padding-top:18px;
+      border-top:1px solid var(--border);
+      color:var(--muted);
+      display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
+      gap:10px;
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .btn{transition:none}
+      .btn:hover{transform:none}
+      .fx::after{opacity:.18}
+    }
+  </style>
+</head>
+
+<body class="fx">
+  <a class="skip" href="#obsah">Přeskočit na obsah</a>
+
+  <header>
+    <div class="nav" role="navigation" aria-label="Hlavní navigace">
+      <a class="brand" href="#top" aria-label="Domů">
+        <span class="mark" aria-hidden="true"></span>
+        <div>
+          <b>Adam</b>
+          <div><span>osobní web • tech / minimal</span></div>
         </div>
+      </a>
+
+      <nav aria-label="Sekce">
+        <a href="#projekt">Projekt</a>
+        <a href="#cert">Certifikace</a>
+        <a href="#zajmy">Zájmy</a>
+        <a href="#kontakt">Kontakt</a>
       </nav>
-      <div id="mobileMenu" class="md:hidden hidden border-t border-slate-200/70 dark:border-slate-800">
-        <div class="space-y-1 px-4 py-3">
-          <a href="#projekty" class="block rounded-lg px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-800">Projekty</a>
-          <a href="#o-mne" class="block rounded-lg px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-800">O mně</a>
-          <a href="#kontakt" class="block rounded-lg px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-800">Kontakt</a>
-          <div class="h-px bg-slate-200/70 dark:bg-slate-800 my-2"></div>
-          <a href="https://mp.spse.cz/" target="_blank" rel="noopener" class="block rounded-lg px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-800">MP (maturitní projekty)</a>
-          <a href="https://i4.spse.cz/" target="_blank" rel="noopener" class="block rounded-lg px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-800">Intranet</a>
-          <button id="themeToggleMobile" class="w-full text-left rounded-lg px-3 py-2 border border-slate-300/70 dark:border-slate-700 hover:border-brand-500 dark:hover:border-brand-400">Přepnout motiv</button>
+
+      <div class="navRight">
+        <button class="btn small" id="themeBtn" type="button" aria-label="Přepnout motiv">
+          Motiv: <span id="themeLabel">auto</span>
+        </button>
+        <a class="btn small" href="https://github.com/PyroStonee" rel="me noopener" target="_blank">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="obsah" class="wrap">
+    <div id="top" class="hero" aria-label="Úvod">
+      <div class="panel pad">
+        <div class="kicker"><i aria-hidden="true"></i> OSOBNÍ WEB</div>
+        <h1 class="glow">IT / Hardware &amp; sítě.<br/>IoT, servery, bezpečnost.</h1>
+        <p class="lead">
+          Stručná prezentace bez zbytečných osobních údajů: maturitní projekt, certifikace a technické zájmy.
+          Stylově „tech“ s inspirací neon / retro-future (černá-červená-bílá).
+        </p>
+
+        <div class="chips" aria-label="Technologie">
+          <span class="chip"><b>Arduino</b> Mega 2560</span>
+          <span class="chip"><b>ESP8266</b> Wi-Fi</span>
+          <span class="chip"><b>Linux</b> admin</span>
+          <span class="chip"><b>C/C++</b> firmware</span>
+          <span class="chip"><b>Cisco</b> sítě</span>
+          <span class="chip"><b>Docker</b> basics</span>
+          <span class="chip"><b>IoT</b> architektura</span>
+        </div>
+
+        <div class="cta">
+          <a class="btn primary" href="#projekt">Maturitní projekt</a>
+          <a class="btn" href="#kontakt">Kontakt (bez formuláře)</a>
         </div>
       </div>
-    </header>
 
-    <!-- Hrdina / Hero -->
-    <main id="obsah">
-      <section class="relative isolate overflow-hidden">
-        <div class="absolute inset-0 -z-10 bg-gradient-to-b from-brand-50 to-transparent dark:from-brand-900/20"></div>
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
-          <div class="grid lg:grid-cols-2 gap-10 items-center">
-            <div>
-              <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight">
-                Maturitní projekt & profesionální portfolio
-              </h1>
-              <p class="mt-5 text-lg text-slate-600 dark:text-slate-300 max-w-prose">
-                Tato stránka slouží jako moderní a přehledná prezentace výsledků práce v oboru IT (Hardware a sítě).
-                Je plně responzivní, přístupná a podporuje světlý i tmavý režim. Odkazy vedou na oficiální portály školy.
-              </p>
-              <div class="mt-8 flex flex-wrap items-center gap-3">
-                <a href="#projekty" class="inline-flex items-center justify-center rounded-xl bg-brand-600 px-5 py-3 text-white shadow-soft hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500">Zobrazit projekty</a>
-                <a href="https://mp.spse.cz/" target="_blank" rel="noopener" class="inline-flex items-center justify-center rounded-xl border border-slate-300/80 dark:border-slate-700 px-5 py-3 hover:border-brand-500 dark:hover:border-brand-400">MP · mp.spse.cz</a>
-                <a href="https://i4.spse.cz/" target="_blank" rel="noopener" class="inline-flex items-center justify-center rounded-xl border border-slate-300/80 dark:border-slate-700 px-5 py-3 hover:border-brand-500 dark:hover:border-brand-400">Intranet · i4.spse.cz</a>
-              </div>
-            </div>
-            <div class="relative">
-              <div class="aspect-[16/10] rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-soft">
-                <img loading="lazy" src="https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1400&auto=format&fit=crop" alt="Ilustrační fotografie – elektronika a vývoj" class="h-full w-full object-cover" />
-              </div>
-              <div class="absolute -bottom-6 -left-6 hidden sm:block bg-white/90 dark:bg-slate-900/90 backdrop-blur rounded-2xl border border-slate-200 dark:border-slate-800 p-4 shadow-soft">
-                <p class="text-sm leading-5 text-slate-600 dark:text-slate-300">Responzivní design · Přístupnost · UX</p>
-              </div>
-            </div>
-          </div>
+      <div class="panel avatarBox" aria-label="Avatar a rychlý přehled">
+        <div class="avatar" aria-label="Avatar placeholder">
+          <!-- Placeholder: generická „helmet“ ikonka (bez cizích IP). Až budete chtít, vyměňte za vlastní avatar. -->
+          <svg viewBox="0 0 128 128" role="img" aria-label="Avatar placeholder">
+            <defs>
+              <linearGradient id="g" x1="0" x2="1">
+                <stop offset="0" stop-color="currentColor" stop-opacity=".95"/>
+                <stop offset="1" stop-color="currentColor" stop-opacity=".55"/>
+              </linearGradient>
+            </defs>
+            <g fill="none" stroke="url(#g)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M26 58c0-22 17-40 38-40s38 18 38 40v16c0 20-16 36-36 36H62C42 110 26 94 26 74V58z"/>
+              <path d="M36 68c10-10 46-10 56 0" opacity=".9"/>
+              <path d="M40 76c8-6 40-6 48 0" opacity=".55"/>
+              <path d="M46 102h36" opacity=".7"/>
+            </g>
+          </svg>
         </div>
-      </section>
 
-      <!-- Sekce Projekty -->
-      <section id="projekty" class="py-20 sm:py-28 bg-slate-50 dark:bg-slate-900/30">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div class="flex items-end justify-between gap-6 flex-wrap">
-            <div>
-              <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">Vybrané projekty</h2>
-              <p class="mt-3 text-slate-600 dark:text-slate-300 max-w-prose">Ukázky praktických prací a školních projektů včetně maturitního projektu. Popisy jsou stručné a konkrétní.</p>
-            </div>
-            <a href="https://mp.spse.cz/" target="_blank" rel="noopener" class="inline-flex items-center gap-2 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-4 py-2 hover:shadow-soft">
-              MP · oficiální přehled
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4"><path d="M16.5 3.75a.75.75 0 01.75.75v3a.75.75 0 01-1.5 0V5.56L9.53 11.5a.75.75 0 01-1.06-1.06l6.16-5.94H15a.75.75 0 010-1.5h1.5z"/><path d="M4.5 6.75a2.25 2.25 0 012.25-2.25H12a.75.75 0 010 1.5H6.75a.75.75 0 00-.75.75V17.25c0 .414.336.75.75.75H17.25a.75.75 0 00.75-.75V12a.75.75 0 011.5 0v5.25A2.25 2.25 0 0117.25 19.5H6.75A2.25 2.25 0 014.5 17.25V6.75z"/></svg>
-            </a>
-          </div>
+        <p class="avatarHint">
+          Avatar zatím placeholder. Cílově: vlastní styl „Omega / Blood-Dragon vibe“ (bez osobní fotky).
+        </p>
 
-          <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            <!-- Karta 1 -->
-            <article class="group rounded-2xl border border-slate-200 dark:border-slate-800 p-5 bg-white dark:bg-slate-950/40 hover:shadow-soft transition">
-              <div class="aspect-video rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800">
-                <img loading="lazy" src="https://images.unsplash.com/photo-1518773553398-650c184e0bb3?q=80&w=1220&auto=format&fit=crop" alt="Arduino a senzory" class="h-full w-full object-cover group-hover:scale-[1.02] transition"/>
-              </div>
-              <h3 class="mt-4 text-xl font-semibold">Domácí bezpečnostní systém (Arduino)</h3>
-              <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Modelová instalace: PIR, MQ-2, RFID/otisk, GSM notifikace (SIM800L), Wi‑Fi modul, napájení 5 V/3 A, společná zem, dokumentace a schémata.</p>
-              <ul class="mt-3 flex flex-wrap gap-2 text-xs text-slate-600 dark:text-slate-300">
-                <li class="rounded-full border border-slate-300/70 dark:border-slate-700 px-2 py-1">C/C++</li>
-                <li class="rounded-full border border-slate-300/70 dark:border-slate-700 px-2 py-1">Arduino</li>
-                <li class="rounded-full border border-slate-300/70 dark:border-slate-700 px-2 py-1">Fritzing</li>
-              </ul>
-            </article>
-
-            <!-- Karta 2 -->
-            <article class="group rounded-2xl border border-slate-200 dark:border-slate-800 p-5 bg-white dark:bg-slate-950/40 hover:shadow-soft transition">
-              <div class="aspect-video rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800">
-                <img loading="lazy" src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1220&auto=format&fit=crop" alt="Počítačové sítě – rack a kabeláž" class="h-full w-full object-cover group-hover:scale-[1.02] transition"/>
-              </div>
-              <h3 class="mt-4 text-xl font-semibold">Segmentace sítě & VLAN (praktikum)</h3>
-              <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Návrh topologie, konfigurace přepínačů, trunk/access porty, DHCP relay, základní zabezpečení a měření propustnosti.</p>
-              <ul class="mt-3 flex flex-wrap gap-2 text-xs text-slate-600 dark:text-slate-300">
-                <li class="rounded-full border border-slate-300/70 dark:border-slate-700 px-2 py-1">Cisco</li>
-                <li class="rounded-full border border-slate-300/70 dark:border-slate-700 px-2 py-1">VLAN</li>
-                <li class="rounded-full border border-slate-300/70 dark:border-slate-700 px-2 py-1">IPv4/IPv6</li>
-              </ul>
-            </article>
-
-            <!-- Karta 3 -->
-            <article class="group rounded-2xl border border-slate-200 dark:border-slate-800 p-5 bg-white dark:bg-slate-950/40 hover:shadow-soft transition">
-              <div class="aspect-video rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800">
-                <img loading="lazy" src="https://images.unsplash.com/photo-1535223289827-42f1e9919769?q=80&w=1220&auto=format&fit=crop" alt="Linux a servery" class="h-full w-full object-cover group-hover:scale-[1.02] transition"/>
-              </div>
-              <h3 class="mt-4 text-xl font-semibold">Linux servery & virtualizace</h3>
-              <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Základy administrace: služby (NGINX, SSH), UFW/iptables, systemd, zálohování, monitoring a bezpečnostní postupy.</p>
-              <ul class="mt-3 flex flex-wrap gap-2 text-xs text-slate-600 dark:text-slate-300">
-                <li class="rounded-full border border-slate-300/70 dark:border-slate-700 px-2 py-1">Linux</li>
-                <li class="rounded-full border border-slate-300/70 dark:border-slate-700 px-2 py-1">Docker</li>
-                <li class="rounded-full border border-slate-300/70 dark:border-slate-700 px-2 py-1">Bash</li>
-              </ul>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <!-- Sekce O mně -->
-      <section id="o-mne" class="py-20 sm:py-28">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div class="grid lg:grid-cols-2 gap-10 items-start">
-            <div>
-              <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">O mně</h2>
-              <p class="mt-4 text-slate-600 dark:text-slate-300 max-w-prose">
-                Jsem student oboru <strong>IT – Hardware a sítě</strong> na SPŠE v Pardubicích. Zaměřuji se na praktická řešení, čistý kód a
-                pečlivou dokumentaci. Baví mě návrh topologií, práce s mikrokontroléry a provoz serverových služeb.
-              </p>
-              <dl class="mt-6 grid sm:grid-cols-2 gap-6">
-                <div class="rounded-2xl border border-slate-200 dark:border-slate-800 p-5 bg-white dark:bg-slate-950/40">
-                  <dt class="font-medium">Silné stránky</dt>
-                  <dd class="mt-2 text-sm text-slate-600 dark:text-slate-300">Systematičnost, důraz na bezpečnost, dokumentace, týmová spolupráce.</dd>
-                </div>
-                <div class="rounded-2xl border border-slate-200 dark:border-slate-800 p-5 bg-white dark:bg-slate-950/40">
-                  <dt class="font-medium">Technologie</dt>
-                  <dd class="mt-2 text-sm text-slate-600 dark:text-slate-300">Arduino, C/C++, Linux, Docker, Cisco, Git, Markdown.</dd>
-                </div>
-              </dl>
-
-              <div class="mt-8 flex flex-wrap gap-3">
-                <a href="https://i4.spse.cz/" target="_blank" rel="noopener" class="inline-flex items-center justify-center rounded-xl border border-slate-300/80 dark:border-slate-700 px-5 py-3 hover:border-brand-500 dark:hover:border-brand-400">Intranet i4.spse.cz</a>
-                <a href="https://mp.spse.cz/" target="_blank" rel="noopener" class="inline-flex items-center justify-center rounded-xl bg-brand-600 px-5 py-3 text-white hover:bg-brand-700 shadow-soft">Maturitní projekty</a>
-              </div>
-            </div>
-            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 p-6 bg-white dark:bg-slate-950/40 shadow-soft">
-              <h3 class="text-xl font-semibold">Co mohu nabídnout</h3>
-              <ul class="mt-4 space-y-3 text-slate-700 dark:text-slate-300">
-                <li class="flex items-start gap-2"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-brand-500"></span>Pečlivé plánování a realistické odhady.</li>
-                <li class="flex items-start gap-2"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-brand-500"></span>Kvalitní dokumentace (diagramy, schémata, postupy).</li>
-                <li class="flex items-start gap-2"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-brand-500"></span>Responzivní webové výstupy a prezentační materiály.</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- CTA Sekce -->
-      <section class="py-16 sm:py-20">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div class="rounded-3xl border border-slate-200 dark:border-slate-800 p-8 sm:p-12 bg-gradient-to-br from-white to-slate-50 dark:from-slate-950 dark:to-slate-900/40 shadow-soft">
-            <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
-              <div>
-                <h3 class="text-2xl sm:text-3xl font-bold tracking-tight">Potřebujete ukázku či konzultaci?</h3>
-                <p class="mt-3 text-slate-600 dark:text-slate-300 max-w-prose">Rád připravím demo, vysvětlím postupy a zodpovím dotazy k projektu nebo síťovým konfiguracím.</p>
-              </div>
-              <a href="#kontakt" class="inline-flex items-center justify-center rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-5 py-3 hover:shadow-soft">Kontaktujte mě</a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Kontakt -->
-      <section id="kontakt" class="py-20 sm:py-28 bg-slate-50 dark:bg-slate-900/30">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div class="grid lg:grid-cols-2 gap-10 items-start">
-            <div>
-              <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">Kontakt</h2>
-              <p class="mt-4 text-slate-600 dark:text-slate-300 max-w-prose">Formulář je napojený na Formspree a chráněný hCaptcha. Vyplňte jej a já se ozvu zpět.</p>
-              <div class="mt-8 space-y-4 text-sm text-slate-600 dark:text-slate-300">
-                <p><strong>Oficiální zdroje:</strong></p>
-                <ul class="list-disc ml-6">
-                  <li><a class="underline hover:text-brand-600 dark:hover:text-brand-400" href="https://mp.spse.cz/" target="_blank" rel="noopener">Maturitní projekty (mp.spse.cz)</a></li>
-                  <li><a class="underline hover:text-brand-600 dark:hover:text-brand-400" href="https://i4.spse.cz/" target="_blank" rel="noopener">Intranet (i4.spse.cz)</a></li>
-                </ul>
-              </div>
-            </div>
-
-            <!-- ✍️ Formulář -->
-            <form id="kontaktForm"
-                  class="rounded-2xl border border-slate-200 dark:border-slate-800 p-6 bg-white dark:bg-slate-950/40 shadow-soft"
-                  action="https://formspree.io/f/mrbyqyqn"  
-                  method="POST">
-              <input type="hidden" name="_subject" value="Nová zpráva z webu – Kontakt" />
-              <input type="hidden" name="_format" value="plain" />
-
-              <div class="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <label for="jmeno" class="block text-sm font-medium mb-1">Jméno</label>
-                  <input id="jmeno" name="jmeno" type="text" required class="w-full rounded-xl border border-slate-300/80 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 outline-none focus:ring-2 focus:ring-brand-500" />
-                </div>
-                <div>
-                  <label for="email" class="block text-sm font-medium mb-1">E‑mail</label>
-                  <input id="email" name="email" type="email" required class="w-full rounded-xl border border-slate-300/80 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 outline-none focus:ring-2 focus:ring-brand-500" />
-                </div>
-                <div class="sm:col-span-2">
-                  <label for="zprava" class="block text-sm font-medium mb-1">Zpráva</label>
-                  <textarea id="zprava" name="zprava" rows="4" required class="w-full rounded-xl border border-slate-300/80 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 outline-none focus:ring-2 focus:ring-brand-500"></textarea>
-                </div>
-                <!-- Honeypot proti spamu -->
-                <input type="text" name="_gotcha" class="hidden" tabindex="-1" autocomplete="off" />
-              </div>
-
-              <div class="mt-6 space-y-4">
-                <div class="flex items-center justify-between">
-                  <label class="inline-flex items-center gap-2 text-sm">
-                    <input type="checkbox" required class="h-4 w-4 rounded border-slate-300 dark:border-slate-700" />
-                    <span>Souhlasím se zpracováním údajů.</span>
-                  </label>
-                </div>
-
-                <!-- hCaptcha widget -->
-                <div class="h-captcha" data-sitekey="REPLACE_WITH_YOUR_HCAPTCHA_SITEKEY"
-                     data-callback="onCaptchaSuccess" data-expired-callback="onCaptchaExpired"></div>
-
-                <div class="flex items-center justify-end">
-                  <button id="submitBtn" type="submit" disabled
-                          class="inline-flex items-center justify-center rounded-xl bg-brand-600 px-5 py-2.5 text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-brand-700 shadow-soft">
-                    Odeslat
-                  </button>
-                </div>
-              </div>
-
-              <p id="formState" class="mt-4 text-sm text-slate-600 dark:text-slate-300 hidden"></p>
-            </form>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <!-- Patička -->
-    <footer class="border-t border-slate-200 dark:border-slate-800">
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-600 dark:text-slate-400">
-        <p>© <span id="year"></span> Adam · SPŠE Pardubice. Všechna práva vyhrazena.</p>
-        <div class="flex items-center gap-3">
-          <a href="#o-mne" class="hover:text-brand-600 dark:hover:text-brand-400">O mně</a>
-          <span class="h-3 w-px bg-slate-300/70 dark:bg-slate-700"></span>
-          <a href="#kontakt" class="hover:text-brand-600 dark:hover:text-brand-400">Kontakt</a>
-          <span class="h-3 w-px bg-slate-300/70 dark:bg-slate-700"></span>
-          <a href="#" class="hover:text-brand-600 dark:hover:text-brand-400">Zpět nahoru</a>
+        <div class="mono" aria-label="Rychlý přehled v terminálovém stylu">
+          <div><span class="m">status</span>: <b class="k">active</b></div>
+          <div><span class="m">focus</span>: <b class="k">maturitní projekt</b> + <b class="k">sítě</b></div>
+          <div><span class="m">theme</span>: <b class="r">red</b>/<b class="k">black</b>/<b class="k">white</b></div>
+          <div class="dim">privacy: minimum osobních údajů, kontakt přes GitHub</div>
         </div>
       </div>
+    </div>
+
+    <section id="projekt" aria-label="Maturitní projekt">
+      <div class="sectionTitle">
+        <div>
+          <h2>Maturitní projekt</h2>
+          <p>Model chytrého zabezpečení domácnosti (IoT) — popis „case study“</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <article class="card col-7">
+          <h3>Model chytrého zabezpečení domácnosti (Arduino + Wi-Fi)</h3>
+          <p>
+            Funkční model: detekce pohybu (PIR), detekce CO (MQ-7), akustický alarm, autorizace přes klávesnici,
+            zámek simulovaný servem a notifikace do Telegramu přes Wi-Fi (relay architektura).
+          </p>
+
+          <div class="metaRow" aria-label="Stack">
+            <span class="chip">Arduino Mega 2560</span>
+            <span class="chip">ESP8266 (AT)</span>
+            <span class="chip">PIR</span>
+            <span class="chip">MQ-7 (CO)</span>
+            <span class="chip">LCD 16×2 (I²C)</span>
+            <span class="chip">Keypad</span>
+            <span class="chip">Servo lock</span>
+          </div>
+
+          <details>
+            <summary><span class="caret" aria-hidden="true"></span><b>Technické poznámky</b> (rozbalit)</summary>
+            <ul>
+              <li><b>Stavový model</b> (režimy: deaktivováno / odchodové zpoždění / aktivní / lock-only).</li>
+              <li><b>MQ-7 vyhodnocení</b>: baseline kalibrace, práh + hystereze, cooldown po poplachu.</li>
+              <li><b>Notifikace</b>: ESP8266 → HTTP (bez TLS) → relay server → Telegram (HTTPS).</li>
+              <li><b>Offline-first</b>: lokální alarm funguje i při výpadku Wi-Fi; události lze frontovat.</li>
+            </ul>
+            <p class="fine">
+              (Detailní stránku projektu doplníme jako další krok: schéma, fotografie, testovací scénáře, odkazy na dokumentaci.)
+            </p>
+          </details>
+        </article>
+
+        <aside class="card col-5">
+          <h3>Proč tohle stojí za ukázku</h3>
+          <p>Nejde jen o „zapojení“. Je to propojení hardwaru, logiky, UI a sítě do stabilního chování.</p>
+          <ul>
+            <li>Důraz na stabilitu a čitelné režimy.</li>
+            <li>Praktická integrace více modulů současně.</li>
+            <li>Smysluplné testovací scénáře a ověření funkce.</li>
+          </ul>
+
+          <div class="cta" style="margin-top:14px">
+            <a class="btn primary" href="#kontakt">Chci se zeptat</a>
+            <a class="btn" href="https://github.com/PyroStonee/test.novakad.cz" target="_blank" rel="noopener">Repo webu</a>
+          </div>
+
+          <p class="fine" style="margin-top:10px">
+            Tip: až budete chtít, přidáme „Project page“ s odkazy na PDF/Docx dokumentaci a fotkami modelu.
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <section id="cert" aria-label="Certifikace">
+      <div class="sectionTitle">
+        <div>
+          <h2>Certifikace</h2>
+          <p>Jen to, co chcete veřejně uvádět</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card col-6">
+          <h3>Angličtina — C1</h3>
+          <p>Pokročilá úroveň; vhodné pro technickou dokumentaci, komunikaci a zdroje.</p>
+          <div class="metaRow">
+            <span class="chip">English</span>
+            <span class="chip">C1</span>
+          </div>
+        </div>
+
+        <div class="card col-6">
+          <h3>Cisco (Networking)</h3>
+          <p>Základy síťové architektury, konfigurace a přehled v praxi (VLAN, IP, topologie…).</p>
+          <div class="metaRow">
+            <span class="chip">Cisco</span>
+            <span class="chip">LAN/WAN</span>
+            <span class="chip">VLAN</span>
+          </div>
+          <p class="fine" style="margin-top:10px">
+            (Pokud chcete, doplním přesný název certifikátu/kurzu a případně odkaz na ověření.)
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="zajmy" aria-label="Zájmy">
+      <div class="sectionTitle">
+        <div>
+          <h2>Zájmy</h2>
+          <p>Technika, systémy, „jak to funguje“</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card col-4">
+          <h3>Gaming</h3>
+          <p>Stylové sci-fi / retro-future věci, modding, technické detaily. (Avatar bude tematický, ne fotka.)</p>
+        </div>
+
+        <div class="card col-4">
+          <h3>Doprava</h3>
+          <p>Železnice i letectví — provoz, logistika, systémy, bezpečnost a „workflow“ v reálném světě.</p>
+        </div>
+
+        <div class="card col-4">
+          <h3>Jaderná energie</h3>
+          <p>Zájem o principy, bezpečnost a analýzu havárií (např. Černobyl) z technického pohledu.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="kontakt" aria-label="Kontakt">
+      <div class="sectionTitle">
+        <div>
+          <h2>Kontakt</h2>
+          <p>Bez formuláře a bez sběru osobních údajů</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card col-7">
+          <h3>Preferovaný kanál: GitHub</h3>
+          <p>Nejčistší varianta pro soukromí: zpráva / issue / profil. Bez e-mailu na webu.</p>
+          <div class="cta" style="margin-top:12px">
+            <a class="btn primary" href="https://github.com/PyroStonee" target="_blank" rel="noopener">Otevřít GitHub profil</a>
+            <a class="btn" href="https://github.com/PyroStonee/test.novakad.cz/issues" target="_blank" rel="noopener">Issues (dotaz)</a>
+          </div>
+          <p class="fine" style="margin-top:10px">
+            Pokud později budete chtít formulář, uděláme ho tak, aby neprozrazoval e-mail (nebo s přesměrováním přes alias).
+          </p>
+        </div>
+
+        <div class="card col-5">
+          <h3>Soukromí</h3>
+          <p>Na webu je záměrně minimum údajů: žádná adresa, škola, fotka ani veřejný e-mail.</p>
+          <ul>
+            <li>Dark/light režim, přístupnost, responzivita.</li>
+            <li>Obsah zaměřený na techniku a projekty.</li>
+            <li>Avatar pouze stylový (bez identity).</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div>© <span id="y"></span> Adam • osobní web</div>
+      <div class="fine">Design: tech / neon minimal • bez analytiky a bez trackerů</div>
     </footer>
+  </main>
 
-    <script>
-      // Rok v patičce
-      document.getElementById('year').textContent = new Date().getFullYear();
+  <script>
+    (function () {
+      const root = document.documentElement;
+      const btn = document.getElementById('themeBtn');
+      const label = document.getElementById('themeLabel');
 
-      // Přepínání motivu (desktop + mobil)
-      function applyTheme(next) {
-        if (next === 'dark') document.documentElement.classList.add('dark');
-        else document.documentElement.classList.remove('dark');
-        localStorage.setItem('theme', next);
+      const getPreferred = () => window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      const apply = (mode) => {
+        root.setAttribute('data-theme', mode);
+        label.textContent = mode;
+        localStorage.setItem('theme', mode);
+      };
+
+      // init
+      const saved = localStorage.getItem('theme') || 'auto';
+      if (saved === 'auto') {
+        root.setAttribute('data-theme', getPreferred());
+        label.textContent = 'auto';
+      } else {
+        apply(saved);
       }
-      function toggleTheme() {
-        const isDark = document.documentElement.classList.contains('dark');
-        applyTheme(isDark ? 'light' : 'dark');
-      }
-      document.getElementById('themeToggle').addEventListener('click', toggleTheme);
-      document.getElementById('themeToggleMobile').addEventListener('click', toggleTheme);
 
-      // Mobilní menu
-      const menuBtn = document.getElementById('menuBtn');
-      const mobileMenu = document.getElementById('mobileMenu');
-      const menuIcon = document.getElementById('menuIcon');
-      const closeIcon = document.getElementById('closeIcon');
-      menuBtn.addEventListener('click', () => {
-        const expanded = menuBtn.getAttribute('aria-expanded') === 'true';
-        menuBtn.setAttribute('aria-expanded', String(!expanded));
-        mobileMenu.classList.toggle('hidden');
-        menuIcon.classList.toggle('hidden');
-        closeIcon.classList.toggle('hidden');
+      btn.addEventListener('click', () => {
+        const current = localStorage.getItem('theme') || 'auto';
+        const next = current === 'auto' ? 'dark' : current === 'dark' ? 'light' : 'auto';
+
+        if (next === 'auto') {
+          localStorage.setItem('theme', 'auto');
+          root.setAttribute('data-theme', getPreferred());
+          label.textContent = 'auto';
+        } else {
+          apply(next);
+        }
       });
 
-      // hCaptcha callbacky (globálně pro data-* na widgetu)
-      const submitBtn = document.getElementById('submitBtn');
-      window.onCaptchaSuccess = function () {
-        if (submitBtn) submitBtn.disabled = false;
-      }
-      window.onCaptchaExpired = function () {
-        if (submitBtn) submitBtn.disabled = true;
-      }
+      // Update year
+      document.getElementById('y').textContent = new Date().getFullYear();
 
-      // AJAX odeslání pro hezčí UX (Formspree)
-      const kontaktForm = document.getElementById('kontaktForm');
-      const formState = document.getElementById('formState');
-      if (kontaktForm) {
-        kontaktForm.addEventListener('submit', async (e) => {
-          e.preventDefault();
-
-          // UX kontrola CAPTCHA
-          if (submitBtn && submitBtn.disabled) {
-            formState.classList.remove('hidden');
-            formState.textContent = 'Potvrďte prosím CAPTCHA.';
-            return;
-          }
-
-          formState.classList.remove('hidden');
-          formState.textContent = 'Odesílám…';
-          try {
-            const formData = new FormData(kontaktForm); // zahrnuje i h-captcha-response
-            const resp = await fetch(kontaktForm.action, { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } });
-            if (resp.ok) {
-              formState.textContent = 'Děkuji, Vaše zpráva byla odeslána.';
-              kontaktForm.reset();
-              if (window.hcaptcha) {
-                hcaptcha.reset();
-                if (submitBtn) submitBtn.disabled = true;
-              }
-            } else {
-              formState.textContent = 'Nepodařilo se odeslat. Zkuste prosím znovu.';
-            }
-          } catch (err) {
-            formState.textContent = 'Došlo k chybě připojení. Zkuste prosím znovu.';
+      // React to OS theme changes if mode is auto
+      if (window.matchMedia) {
+        window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => {
+          const cur = localStorage.getItem('theme') || 'auto';
+          if (cur === 'auto') {
+            root.setAttribute('data-theme', getPreferred());
           }
         });
       }
-    </script>
-  </body>
+    })();
+  </script>
+</body>
 </html>
