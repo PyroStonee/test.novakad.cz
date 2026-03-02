@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="cs" data-theme="auto">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
+  <title>Projekt • Model chytrého zabezpečení domácnosti</title>
+  <meta name="description" content="Case study maturitního projektu: Arduino Mega 2560 + ESP8266, PIR, MQ-7, klávesnice, LCD I2C, servo, alarm a notifikace do Telegramu přes relay." />
+  <meta name="robots" content="index,follow" />
+  <link rel="stylesheet" href="../assets/site.css" />
+  <script src="../assets/site.js" defer></script>
+
+  <style>
+    /* drobné doplňky pouze pro tuto stránku */
+    .diagram{
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--card) 92%, transparent), color-mix(in oklab, var(--card2) 88%, transparent));
+      padding:16px;
+      overflow:hidden;
+    }
+    .diagram svg{width:100%; height:auto; display:block}
+    .kpi{
+      display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; margin-top:12px;
+    }
+    .kpi .box{
+      border:1px solid var(--border);
+      border-radius: 16px;
+      background: color-mix(in oklab, var(--card) 78%, transparent);
+      padding:12px;
+    }
+    .kpi b{display:block; font-size:18px; margin-bottom:2px}
+    @media (max-width: 920px){ .kpi{grid-template-columns: 1fr} }
+
+    .table{
+      width:100%;
+      border-collapse: collapse;
+      border:1px solid var(--border);
+      border-radius: 14px;
+      overflow:hidden;
+      background: color-mix(in oklab, var(--card) 76%, transparent);
+    }
+    .table th,.table td{
+      padding:10px 12px;
+      border-bottom:1px solid var(--border);
+      text-align:left;
+      vertical-align:top;
+    }
+    .table th{color:var(--fg)}
+    .table td{color:var(--muted)}
+  </style>
+</head>
+
+<body class="fx">
+  <a class="skip" href="#obsah">Přeskočit na obsah</a>
+
+  <header>
+    <div class="nav" role="navigation" aria-label="Hlavní navigace">
+      <a class="brand" href="../index.html" aria-label="Domů">
+        <span class="mark" aria-hidden="true"></span>
+        <div>
+          <b>Adam</b>
+          <div><span>projekt • case study</span></div>
+        </div>
+      </a>
+
+      <div class="navLinks" aria-label="Sekce">
+        <a href="#prehled">Přehled</a>
+        <a href="#architektura">Architektura</a>
+        <a href="#logika">Logika</a>
+        <a href="#testy">Testy</a>
+      </div>
+
+      <div class="navRight">
+        <button class="btn small" type="button" data-theme-toggle>
+          Motiv: <span data-theme-label>auto</span>
+        </button>
+        <a class="btn small" href="https://github.com/PyroStonee" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="obsah" class="wrap">
+    <div class="panel pad" id="prehled">
+      <div class="kicker"><i aria-hidden="true"></i> CASE STUDY</div>
+      <h1>Model chytrého zabezpečení domácnosti</h1>
+      <p class="lead">
+        Funkční ukázkový systém postavený na <b>Arduino Mega 2560</b> s <b>ESP8266</b> (AT).
+        Kombinuje <b>detekci pohybu</b> (PIR) a <b>detekci CO</b> (MQ-7), lokální alarm a bezpečnou logiku režimů.
+        Notifikace jdou do <b>Telegramu</b> přes relay server (ESP → HTTP bez TLS → server → HTTPS Telegram Bot API).
+      </p>
+
+      <div class="kpi" aria-label="Rychlé parametry">
+        <div class="box">
+          <b>Režimy</b>
+          <div class="muted">DISARMED / EXIT_DELAY / ARMED / LOCK_ONLY</div>
+        </div>
+        <div class="box">
+          <b>Senzory</b>
+          <div class="muted">PIR + MQ-7 (baseline/hystereze/cooldown)</div>
+        </div>
+        <div class="box">
+          <b>Notifikace</b>
+          <div class="muted">Edge-trigger + fronta událostí</div>
+        </div>
+      </div>
+
+      <div class="chips" aria-label="Stack">
+        <span class="chip"><b>Arduino</b> Mega 2560</span>
+        <span class="chip"><b>ESP8266</b> AT</span>
+        <span class="chip"><b>MQ-7</b> CO</span>
+        <span class="chip"><b>PIR</b> motion</span>
+        <span class="chip"><b>LCD 16×2</b> I²C</span>
+        <span class="chip"><b>Keypad</b> 4×4</span>
+        <span class="chip"><b>Servo</b> lock</span>
+        <span class="chip"><b>Bzučák</b> alarm</span>
+      </div>
+
+      <div class="cta">
+        <a class="btn primary" href="#architektura">Architektura</a>
+        <a class="btn" href="#testy">Testovací scénáře</a>
+      </div>
+
+      <p class="fine" style="margin-top:12px">
+        Pozn.: Úmyslně nezveřejňuji citlivé údaje (SSID, hesla, tokeny). Dokumentace s plnými údaji se dává pouze „na vyžádání“.
+      </p>
+    </div>
+
+    <section id="architektura" aria-label="Architektura">
+      <div class="sectionTitle">
+        <div>
+          <h2>Architektura</h2>
+          <p>Jasné bloky + důvod relay serveru</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="diagram col-7" aria-label="Blokové schéma">
+          <svg viewBox="0 0 960 520" role="img" aria-label="Blokové schéma systému">
+            <defs>
+              <marker id="arr" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                <path d="M0,0 L12,6 L0,12 Z" fill="currentColor" opacity=".85"></path>
+              </marker>
+            </defs>
+
+            <!-- Boxes -->
+            <g fill="none" stroke="currentColor" opacity=".92" stroke-width="2.2">
+              <rect x="40" y="70" width="260" height="160" rx="16"></rect>
+              <rect x="40" y="270" width="260" height="170" rx="16"></rect>
+
+              <rect x="360" y="150" width="250" height="220" rx="18"></rect>
+
+              <rect x="670" y="90" width="250" height="140" rx="16"></rect>
+              <rect x="670" y="270" width="250" height="160" rx="16"></rect>
+
+              <!-- Arrows -->
+              <path d="M300 150 L360 200" marker-end="url(#arr)"></path>
+              <path d="M300 350 L360 280" marker-end="url(#arr)"></path>
+              <path d="M610 220 L670 160" marker-end="url(#arr)"></path>
+              <path d="M610 300 L670 340" marker-end="url(#arr)"></path>
+            </g>
+
+            <!-- Text -->
+            <g fill="currentColor" opacity=".95" font-family="ui-sans-serif, system-ui" font-size="18">
+              <text x="60" y="110">Vstupy / UI</text>
+              <text x="60" y="140" font-size="15" opacity=".85">• PIR (pohyb)</text>
+              <text x="60" y="165" font-size="15" opacity=".85">• MQ-7 (CO) → A0</text>
+              <text x="60" y="190" font-size="15" opacity=".85">• Klávesnice (kódy)</text>
+
+              <text x="60" y="315">Výstupy</text>
+              <text x="60" y="345" font-size="15" opacity=".85">• LCD 16×2 (I²C)</text>
+              <text x="60" y="370" font-size="15" opacity=".85">• Bzučák (alarm)</text>
+              <text x="60" y="395" font-size="15" opacity=".85">• Servo (zámek)</text>
+
+              <text x="390" y="190">Řídicí jednotka</text>
+              <text x="390" y="220" font-size="15" opacity=".85">Arduino Mega 2560</text>
+              <text x="390" y="245" font-size="15" opacity=".85">• stavový automat režimů</text>
+              <text x="390" y="270" font-size="15" opacity=".85">• neblokující smyčka</text>
+              <text x="390" y="295" font-size="15" opacity=".85">• fronta událostí</text>
+              <text x="390" y="320" font-size="15" opacity=".85">• edge-trigger notifikace</text>
+
+              <text x="690" y="130">Relay server</text>
+              <text x="690" y="160" font-size="15" opacity=".85">ESP8266 → HTTP (bez TLS)</text>
+              <text x="690" y="185" font-size="15" opacity=".85">Server → HTTPS Telegram API</text>
+
+              <text x="690" y="310">Telegram</text>
+              <text x="690" y="340" font-size="15" opacity=".85">Notifikace událostí</text>
+              <text x="690" y="365" font-size="15" opacity=".85">(pohyb / plyn)</text>
+            </g>
+          </svg>
+        </div>
+
+        <div class="card col-5">
+          <h3>Proč relay</h3>
+          <p>
+            ESP8266 v režimu AT příkazů je v praxi často limitované TLS kompatibilitou. Proto:
+            <b>ESP odešle jednoduchý HTTP request</b> na vlastní server a server provede
+            <b>HTTPS volání</b> na Telegram Bot API.
+          </p>
+
+          <details>
+            <summary><span class="caret" aria-hidden="true"></span><b>Bezpečnostní poznámka</b></summary>
+            <ul>
+              <li>Na webu nezveřejňuji tokeny ani SSID.</li>
+              <li>Relay endpoint je vhodné chránit (tajný klíč / rate-limit / IP allowlist).</li>
+              <li>Notifikace jsou „edge-trigger“, aby se zabránilo spamu.</li>
+            </ul>
+          </details>
+
+          <div class="cta" style="margin-top:14px">
+            <a class="btn primary" href="#logika">Logika a režimy</a>
+            <a class="btn" href="../index.html">Zpět na úvod</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="logika" aria-label="Logika a režimy">
+      <div class="sectionTitle">
+        <div>
+          <h2>Logika a režimy</h2>
+          <p>Stavový automat + algoritmus MQ-7</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card col-6">
+          <h3>Režimy (stavový automat)</h3>
+          <p class="muted">Zjednodušeně: režim určuje, co je aktivní, co se loguje a co spouští poplach.</p>
+
+          <table class="table" aria-label="Přehled režimů">
+            <thead>
+              <tr>
+                <th>Režim</th>
+                <th>Chování</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>DISARMED</b></td>
+                <td>PIR poplach vypnut, systém ovladatelný, zámek dle kódu.</td>
+              </tr>
+              <tr>
+                <td><b>EXIT_DELAY</b></td>
+                <td>30 s na opuštění prostoru po aktivaci (bez PIR poplachu).</td>
+              </tr>
+              <tr>
+                <td><b>ARMED</b></td>
+                <td>Střežení: PIR detekce vyhlašuje pohybový poplach.</td>
+              </tr>
+              <tr>
+                <td><b>LOCK_ONLY</b></td>
+                <td>Ovládání zámku bez PIR střežení (praktické pro demo).</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <details>
+            <summary><span class="caret" aria-hidden="true"></span><b>Kódy (pevné pro demo)</b></summary>
+            <ul>
+              <li><b>4321</b> – ARM + přechod do EXIT_DELAY + zamknutí</li>
+              <li><b>1234</b> – DISARM + odemknutí + zrušení pohybového poplachu</li>
+              <li><b>1243</b> – LOCK_ONLY + zamknutí</li>
+            </ul>
+          </details>
+        </div>
+
+        <div class="card col-6">
+          <h3>MQ-7: baseline, hystereze, cooldown</h3>
+          <p>
+            MQ-7 se vyhodnocuje relativně k referenční úrovni po startu. Cílem je stabilnější detekce bez „šumu“.
+          </p>
+          <ul>
+            <li><b>Kalibrace baseline:</b> 30 s po startu.</li>
+            <li><b>Perioda měření:</b> ~200 ms.</li>
+            <li><b>Poplach:</b> baseline + 220 (delta práh).</li>
+            <li><b>Vypnutí poplachu:</b> hystereze 50.</li>
+            <li><b>Cooldown:</b> 60 s po poplachu (zabránění opakovanému spínání).</li>
+          </ul>
+
+          <details>
+            <summary><span class="caret" aria-hidden="true"></span><b>Priorita událostí</b></summary>
+            <ul>
+              <li>Plynový poplach má vyšší prioritu než pohybový poplach.</li>
+              <li>Alarm: plyn = souvislý tón, pohyb = přerušovaný tón (pro rozlišení).</li>
+            </ul>
+          </details>
+        </div>
+
+        <div class="card col-12">
+          <h3>„Non-blocking“ hlavní smyčka (princip)</h3>
+          <p class="muted">Cílem je, aby více bloků běželo současně bez dlouhých prodlev.</p>
+          <pre><code>// Pseudokód (struktura)
+loop():
+  handleModeStateMachine()
+  readKeypadAndApplyCode()
+  handlePIR()
+  sampleMQ7AndEvaluate()
+  driveBuzzerPattern()
+  wifiTickAndSendQueuedNotifications()</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="testy" aria-label="Testovací scénáře">
+      <div class="sectionTitle">
+        <div>
+          <h2>Testovací scénáře</h2>
+          <p>Co by měl hodnotitel vidět „naživo“</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card col-7">
+          <h3>Scénáře (doporučená demo posloupnost)</h3>
+          <ol class="muted" style="margin:12px 0 0; padding-left:18px">
+            <li><b>Boot + baseline:</b> start, LCD hlásí inicializaci a kalibraci MQ-7.</li>
+            <li><b>LOCK_ONLY:</b> zadání 1243 → zamknutí servem (bez střežení PIR).</li>
+            <li><b>ARM + EXIT_DELAY:</b> zadání 4321 → 30 s odchodové zpoždění.</li>
+            <li><b>PIR poplach:</b> po přechodu do ARMED vyvolat pohyb → alarm + notifikace (jednorázově).</li>
+            <li><b>DISARM:</b> zadání 1234 → zrušení pohybového poplachu + odemknutí.</li>
+            <li><b>MQ-7 poplach:</b> simulace zvýšení (demo zdroj) → souvislý alarm + notifikace.</li>
+            <li><b>Hystereze:</b> ukázat, že se poplach nevypíná „kmitáním“ kolem prahu.</li>
+            <li><b>Cooldown:</b> po skončení plynového poplachu nejde hned znovu vyhlásit.</li>
+          </ol>
+        </div>
+
+        <div class="card col-5">
+          <h3>Co tím dokazujete</h3>
+          <ul>
+            <li>Správně navržené režimy a přechody.</li>
+            <li>Odolnost proti opakovanému spamu notifikací.</li>
+            <li>Rozlišení typů poplachu (uživatelsky srozumitelné).</li>
+            <li>Stabilní vyhodnocení MQ-7 (baseline/hystereze/cooldown).</li>
+          </ul>
+
+          <div class="cta" style="margin-top:14px">
+            <a class="btn primary" href="../index.html#projekt">Zpět na přehled</a>
+            <a class="btn" href="../404.html">Zkontrolovat 404</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div>© <span data-year></span> Adam • projekt</div>
+      <div class="fine">Bez trackerů • bez externích CDN • minimum osobních údajů</div>
+    </footer>
+  </main>
+</body>
+</html>
